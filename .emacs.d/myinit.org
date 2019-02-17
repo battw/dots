@@ -1,0 +1,274 @@
+#+STARTUP: overview 
+#+PROPERTY: header-args :comments yes :results silent
+* A Basic Settings
+  #+BEGIN_SRC emacs-lisp
+    (setq inhibit-startup-message t)
+
+    (fset 'yes-or-no-p 'y-or-n-p)
+
+    (scroll-bar-mode -1)
+    (menu-bar-mode -1)
+    (tool-bar-mode -1)
+
+    ;; Display both line and column numbers in mode line
+    (setq line-number-mode t)
+    (setq column-number-mode t)
+    ;; Adds new lines  when moving cursor past the end of the file
+    (setq next-line-add-newlines t)
+
+    ;; Saves the current desktop (stuff that is loaded, window layout etc.)
+    ;;   (desktop-save-mode 1)
+
+    (setq tab-width 4)
+    (setq-default indent-tabs-mode nil) ;; Spaces rather than tabs
+  #+END_SRC
+* Ace Window
+  #+BEGIN_SRC emacs-lisp
+    (use-package ace-window
+      :ensure t
+      :init
+      (global-set-key [remap other-window] 'ace-window)
+      (custom-set-faces
+       '(aw-leading-char-face
+         ((t (:inherit ace-jump-face-foreground :height 3.0))))))
+  #+END_SRC
+
+* Auto Package Update
+  #+BEGIN_SRC emacs-lisp
+    ;; Make packages update themselves
+    (use-package auto-package-update
+      :ensure t
+      :config
+      (setq auto-package-update-delete-old-versions t)
+      (setq auto-package-update-hide-results t)
+      (auto-package-update-maybe))
+  #+END_SRC  
+
+* Avy
+  #+BEGIN_SRC emacs-lisp
+    ;; Quick jump to character
+    (use-package avy
+      :disabled
+      :ensure t
+      :bind ("M-s" . avy-goto-word-1))
+  #+END_SRC#+END_SRC
+
+* Company
+  #+BEGIN_SRC emacs-lisp
+    ;; Auto completion
+    (use-package company
+      :ensure t
+      :bind
+      (:map company-active-map
+            ("M-n" . nil)
+            ("M-p" . nil)
+            ("C-n" . company-select-next)
+            ("C-p" . company-select-previous))
+      :config
+      (setq company-tooltip-limit 20)                        ; completion list length
+      (setq company-idle-delay .3)                           ; delay before popup shows
+      (setq company-echo-delay 0)                            ; remove annoying blinking
+      (setq company-begin-commands '(self-insert-command)))  ; start autocompletion only after typing
+  #+END_SRC
+
+** Company Go
+   #+BEGIN_SRC emacs-lisp
+     (use-package company-go
+     :ensure t
+     :init
+     (add-hook 'go-mode-hook
+     (lambda ()
+     (set (make-local-variable 'company-backends) '(company-go))
+     (company-mode))))
+   #+END_SRC
+
+* Counsel
+  #+BEGIN_SRC emacs-lisp
+    (use-package counsel
+    :ensure t
+      :bind
+      (("M-y" . counsel-yank-pop)
+       :map ivy-minibuffer-map
+       ("M-y" . ivy-next-line)))
+  #+END_SRC
+
+* Dumb Jump
+    #+BEGIN_SRC emacs-lisp
+      (use-package dumb-jump
+        :ensure t
+        :bind (("M-g o" . dumb-jump-go-other-window)
+               ("M-g j" . dumb-jump-go)
+               ("M-g i" . dumb-jump-go-prompt)
+               ("M-g x" . dumb-jump-go-prefer-external)
+               ("M-g z" . dumb-jump-go-prefer-external-other-window))
+        :config (setq dumb-jump-selector 'ivy))
+    #+END_SRC
+
+* EShell
+  #+BEGIN_SRC emacs-lisp
+    ;; eshell
+    (setq eshell-prompt-regexp "^[^#$\n]*[#$>] "
+          eshell-prompt-function
+          (lambda ()
+            (propertize "----> " 'face `(:foreground "yellow"))))
+  #+END_SRC
+
+* Flycheck
+    #+BEGIN_SRC emacs-lisp
+      (use-package flycheck
+        :ensure t
+        :init (global-flycheck-mode))
+    #+END_SRC
+
+* Go Mode
+  #+BEGIN_SRC emacs-lisp
+    (use-package go-mode
+      :ensure t
+      :config
+      (add-hook 'before-save-hook 'gofmt-before-save))
+  #+END_SRC
+
+* IBuffer (Is this functionality provided by another plugin I have installed
+  #+BEGIN_SRC emacs-lisp
+    ;; (defalias 'list-buffers 'ibuffer)
+    ;; (setq ibuffer-default-sorting-mode 'major-mode)
+  #+END_SRC
+
+* Ido
+  #+BEGIN_SRC emacs-lisp
+    ;; (setq ido-enable-flex-matching t)
+    ;; (setq ido-everywhere t)
+    ;; (ido-mode 1)
+  #+END_SRC
+
+* Ivy
+  #+BEGIN_SRC emacs-lisp
+      (use-package ivy
+      :ensure t
+      :diminish (ivy-mode)
+      :bind (("C-x b" . ivy-switch-buffer))
+      :config
+      (ivy-mode 1)
+      (setq ivy-use-virtual-buffers t)
+      (setq ivy-count-format "%d/%d ")
+      (setq ivy-display-style 'fancy))
+  #+END_SRC
+  
+* Key Chord
+  #+BEGIN_SRC emacs-lisp
+    (use-package key-chord
+      :ensure t
+      :config
+      (key-chord-mode 1)
+      (setq key-chord-two-keys-delay 0.01)
+      (let ((sub-keymap (make-sparse-keymap)))
+        (define-key sub-keymap "o" 'ace-window)
+        (define-key sub-keymap "b" 'ivy-switch-buffer)
+        (define-key sub-keymap "f" 'counsel-find-file)
+        (define-key sub-keymap "k" 'kill-buffer)
+        (define-key sub-keymap "s" 'save-buffer)
+        (key-chord-define-global "jk" sub-keymap)))
+  #+END_SRC
+
+* Org Mode
+
+** Bullets
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-bullets
+       :ensure t
+       :config
+       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+   #+END_SRC
+
+** Org
+   #+BEGIN_SRC emacs-lisp
+     (use-package org
+       :ensure t
+       ;; :bind
+       ;; (:map org-mode-map
+       ;;       ("C-x C-e" . org-babel-execute-src-block))
+       :config
+       (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
+                     org-confirm-babel-evaluate nil
+                     ;;org-src-preserve-indentation nil
+                     ;;org-edit-src-content-indentation 0
+                     ;;org-src-fontify-natively t
+                     ;;org-src-tabs-act-natively t
+                     )
+       (org-babel-do-load-languages
+        'org-babel-load-languages
+        '((python . t))))
+   #+END_SRC
+
+* PDF Tools
+    #+BEGIN_SRC emacs-lisp
+      (use-package pdf-tools
+        :ensure t
+        :config
+        (pdf-tools-install))
+    #+END_SRC
+* Projectile
+    #+BEGIN_SRC emacs-lisp
+      ;; projectile
+      (use-package projectile
+        :ensure t
+        :bind ("C-c p" . projectile-command-map)
+        :config
+        (setq projectile-global-mode t)
+        (setq projectile-completion-system 'ivy))
+    #+END_SRC
+
+* Racket Mode
+    #+BEGIN_SRC emacs-lisp
+      (use-package racket-mode
+        :ensure t
+        :bind
+        (:map racket-mode-map
+              ("C-c r" . racket-run))
+        :config
+        (setq tab-always-indent 'complete))
+    #+END_SRC
+
+* Swiper
+  #+BEGIN_SRC emacs-lisp
+      (use-package swiper
+      :ensure t
+      :bind (("C-s" . swiper)
+             ("C-r" . swiper)
+             ("C-c C-r" . ivy-resume)
+             ("M-x" . counsel-M-x)
+             ("C-x C-f" . counsel-find-file))
+      :config
+      (ivy-mode 1)
+      (setq ivy-use-virtual-buffers t)
+      (setq ivy-display-style 'fancy)
+      (setq swiper-goto-start-of-match t)
+      (define-key read-expression-map (kbd "C-r") 'counsel-expression-history))
+  #+END_SRC
+
+* Themes
+  #+BEGIN_SRC emacs-lisp
+    ;; (use-package color-theme :ensure t) ;; provides a load of themes
+    (use-package gruvbox-theme :ensure t)
+  #+END_SRC
+
+* Try
+  #+BEGIN_SRC emacs-lisp
+    (use-package try :ensure t)
+  #+END_SRC
+
+* Which Key
+  #+BEGIN_SRC emacs-lisp
+    (use-package which-key
+      :ensure t
+      :config
+      (which-key-mode))
+  #+END_SRC
+
+
+
+
+
+
+
+
