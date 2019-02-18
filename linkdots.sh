@@ -24,7 +24,7 @@ bckpdir=$home.dotbckps$datestr
 mkdir $bckpdir
 
 cd $dots
-filepaths=$(find ./.[^.]*)
+filepaths=$(find ./.[^.]* -path ./.git -prune -o -print) # ignoring .git/
 for fpath in $filepaths
 do
     if [[ -f $fpath ]] # if is file in ~/dots/...

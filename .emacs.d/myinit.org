@@ -1,27 +1,44 @@
 #+STARTUP: overview 
 #+PROPERTY: header-args :comments yes :results silent
 * A Basic Settings
-  #+BEGIN_SRC emacs-lisp
-    (setq inhibit-startup-message t)
-
-    (fset 'yes-or-no-p 'y-or-n-p)
-
-    (scroll-bar-mode -1)
-    (menu-bar-mode -1)
-    (tool-bar-mode -1)
-
+** GUI
+   #+BEGIN_SRC emacs-lisp
+     (scroll-bar-mode -1)
+     (menu-bar-mode -1)
+     (tool-bar-mode -1)
+   #+END_SRC
+** Mode line
+   #+BEGIN_SRC emacs-lisp
     ;; Display both line and column numbers in mode line
     (setq line-number-mode t)
     (setq column-number-mode t)
+   #+END_SRC
+
+** Behaviour
+   #+BEGIN_SRC emacs-lisp
+    (fset 'yes-or-no-p 'y-or-n-p)
     ;; Adds new lines  when moving cursor past the end of the file
     (setq next-line-add-newlines t)
-
+    (setq inhibit-startup-message t)
     ;; Saves the current desktop (stuff that is loaded, window layout etc.)
     ;;   (desktop-save-mode 1)
+   #+END_SRC
 
-    (setq tab-width 4)
-    (setq-default indent-tabs-mode nil) ;; Spaces rather than tabs
-  #+END_SRC
+** Tabs
+   #+BEGIN_SRC emacs-lisp
+     (setq tab-width 4)
+     (setq-default indent-tabs-mode nil) ;; Spaces rather than tabs
+   #+END_SRC
+
+** Move backup and autosave files to .emacs.d/{auto-save,backups}
+   #+BEGIN_SRC emacs-lisp
+   (setq auto-save-file-name-transforms
+           `((".*" ,(concat user-emacs-directory "auto-save/") t))) 
+
+   (setq backup-directory-alist
+       `(("." . ,(expand-file-name
+                  (concat user-emacs-directory "backups")))))
+   #+END_SRC
 * Ace Window
   #+BEGIN_SRC emacs-lisp
     (use-package ace-window
@@ -54,6 +71,8 @@
   #+END_SRC#+END_SRC
 
 * Company
+  http://company-mode.github.io/
+
   #+BEGIN_SRC emacs-lisp
     ;; Auto completion
     (use-package company
@@ -65,10 +84,11 @@
             ("C-n" . company-select-next)
             ("C-p" . company-select-previous))
       :config
-      (setq company-tooltip-limit 20)                        ; completion list length
-      (setq company-idle-delay .3)                           ; delay before popup shows
-      (setq company-echo-delay 0)                            ; remove annoying blinking
-      (setq company-begin-commands '(self-insert-command)))  ; start autocompletion only after typing
+      (global-company-mode t)
+      (setq company-tooltip-limit 20)                        ;; completion list length
+      (setq company-idle-delay .3)                           ;; delay before popup shows
+      (setq company-echo-delay 0)                            ;; remove annoying blinking
+      (setq company-begin-commands '(self-insert-command)))  ;; start autocompletion only after typing
   #+END_SRC
 
 ** Company Go
@@ -80,6 +100,11 @@
      (lambda ()
      (set (make-local-variable 'company-backends) '(company-go))
      (company-mode))))
+   #+END_SRC
+
+** Company Elisp
+   #+BEGIN_SRC emacs-lisp
+   
    #+END_SRC
 
 * Counsel
@@ -128,6 +153,27 @@
       (add-hook 'before-save-hook 'gofmt-before-save))
   #+END_SRC
 
+* Hydra
+  #+BEGIN_SRC emacs-lisp
+    (use-package hydra :ensure t)
+
+    (key-chord-define-global "jk" 'hydra-common/body)
+    (defhydra hydra-common (:color blue)
+      "Common"
+      ("o" ace-window "Other")
+      ("b" ivy-switch-buffer "Buffer")
+      ("f" counsel-find-file "File")
+      ("k" kill-buffer "Kill")
+      ("s" save-buffer "Save")
+      ("g" swiper "Search")
+      ("1" delete-other-windows "Del Other Wins")
+      ("2" split-window-below "Split Below")
+      ("3" split-window-right "Split Right")
+      ("q" nil "Quit"))
+
+
+
+  #+END_SRC
 * IBuffer (Is this functionality provided by another plugin I have installed
   #+BEGIN_SRC emacs-lisp
     ;; (defalias 'list-buffers 'ibuffer)
@@ -160,14 +206,7 @@
       :ensure t
       :config
       (key-chord-mode 1)
-      (setq key-chord-two-keys-delay 0.01)
-      (let ((sub-keymap (make-sparse-keymap)))
-        (define-key sub-keymap "o" 'ace-window)
-        (define-key sub-keymap "b" 'ivy-switch-buffer)
-        (define-key sub-keymap "f" 'counsel-find-file)
-        (define-key sub-keymap "k" 'kill-buffer)
-        (define-key sub-keymap "s" 'save-buffer)
-        (key-chord-define-global "jk" sub-keymap)))
+      (setq key-chord-two-keys-delay 0.04))
   #+END_SRC
 
 * Org Mode
@@ -201,12 +240,13 @@
    #+END_SRC
 
 * PDF Tools
-    #+BEGIN_SRC emacs-lisp
-      (use-package pdf-tools
-        :ensure t
-        :config
-        (pdf-tools-install))
-    #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package pdf-tools
+      :ensure t
+      :config
+      (pdf-tools-install))
+  #+END_SRC
+
 * Projectile
     #+BEGIN_SRC emacs-lisp
       ;; projectile
@@ -228,7 +268,7 @@
         :config
         (setq tab-always-indent 'complete))
     #+END_SRC
-
+    
 * Swiper
   #+BEGIN_SRC emacs-lisp
       (use-package swiper
@@ -245,11 +285,15 @@
       (setq swiper-goto-start-of-match t)
       (define-key read-expression-map (kbd "C-r") 'counsel-expression-history))
   #+END_SRC
-
+  
 * Themes
   #+BEGIN_SRC emacs-lisp
     ;; (use-package color-theme :ensure t) ;; provides a load of themes
-    (use-package gruvbox-theme :ensure t)
+    ;; (use-package gruvbox-theme :ensure t)
+    ;; (use-package zenburn-theme :ensure t)
+    ;; (use-package jazz-theme :ensure t)
+    ;; (use-package monokai-theme :ensure t)
+    (use-package darktooth-theme :ensure t)
   #+END_SRC
 
 * Try
