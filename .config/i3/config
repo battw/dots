@@ -190,8 +190,8 @@ bar {
 # Window border size. Also removes menu.
 default_border pixel 2
 hide_edge_borders smart
-workspace 1 gaps inner 26
-workspace 3 gaps inner 26
+#workspace 1 gaps inner 10
+#workspace 3 gaps inner 26
 
 
 # class                 border  backgr. text    indicator child_border

@@ -1,6 +1,24 @@
 #+STARTUP: overview 
 #+PROPERTY: header-args :comments yes :results silent
 * A Basic Settings
+** Symlink Hack
+   By default emacs will query the user asking whether it should follow the sym link to 
+   the configuration files. This function creates a .emacs file which will prevent this 
+   from happening.
+   #+BEGIN_SRC emacs-lisp
+     (defun symlinkhack ()
+       (let ((fname "~/.emacs"))
+         (if (not (file-exists-p fname))
+             (with-temp-file fname
+               (insert "(setq vc-follow-symlinks t)\n(load-file \"~/.emacs.d/init.el\")")))))
+
+     (symlinkhack)
+   #+END_SRC
+** Follow links
+   #+BEGIN_SRC emacs-lisp
+     (setq vc-follow-symlinks t)   
+   #+END_SRC
+
 ** GUI
    #+BEGIN_SRC emacs-lisp
      (scroll-bar-mode -1)
@@ -161,6 +179,7 @@
     (defhydra hydra-common (:color blue)
       "Common"
       ("s" swiper "search")
+      ("h" help "help")
       ("f" hydra-file/body "file" :exit t)
       ("w" hydra-win/body "win" :exit t)
       ("b" hydra-buf/body "buf" :exit t)
@@ -187,11 +206,11 @@
     (defhydra hydra-buf (:color blue)
       "Buf"
       ("k" kill-buffer "kill")
-      ("s" ivy-switch-buffer "switch")
+      ("s" ivy-switch-buffer "find")
       ("q" nil))
 
   #+END_SRC
-* IBuffer (Is this functionality provided by another plugin I have installed
+* IBuffer
   #+BEGIN_SRC emacs-lisp
     ;; (defalias 'list-buffers 'ibuffer)
     ;; (setq ibuffer-default-sorting-mode 'major-mode)
@@ -244,6 +263,7 @@
        ;; (:map org-mode-map
        ;;       ("C-x C-e" . org-babel-execute-src-block))
        :config
+       (setq org-return-follows-link t)
        (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
                      org-confirm-babel-evaluate nil
                      ;;org-src-preserve-indentation nil
@@ -305,18 +325,23 @@
   
 * Themes
   #+BEGIN_SRC emacs-lisp
-    ;; (use-package color-theme :ensure t) ;; provides a load of themes
-    ;; (use-package gruvbox-theme :ensure t)
-    ;; (use-package zenburn-theme :ensure t)
-    ;; (use-package jazz-theme :ensure t)
-    ;; (use-package monokai-theme :ensure t)
-    ;; (use-package darktooth-theme :ensure t)
-    ;;(use-package dracula-theme :ensure t)
-    (use-package color-theme-sanityinc-tomorrow 
-    :ensure t
-    :config
-    (load-theme 'sanityinc-tomorrow-eighties))
+        ;; (use-package color-theme :ensure t) ;; provides a load of themes
+        ;; (use-package gruvbox-theme :ensure t)
 
+        ;; (use-package zenburn-theme 
+        ;;   :ensure t
+        ;;   :init
+        ;;   (setq zenburn-override-colors-alist
+        ;;         '(("zenburn-bg" . "#111111"))))
+
+        ;;(use-package jazz-theme :ensure t)
+        ;; (use-package monokai-theme :ensure t)
+        ;; (use-package darktooth-theme :ensure t)
+        ;;(use-package dracula-theme :ensure t)
+    (use-package color-theme-sanityinc-tomorrow 
+      :ensure t
+      :config
+      (load-theme 'sanityinc-tomorrow-eighties t)) ;; the t prevents the warning message on startup
   #+END_SRC
 
 * Try
@@ -331,6 +356,8 @@
       :config
       (which-key-mode))
   #+END_SRC
+
+
 
 
 
