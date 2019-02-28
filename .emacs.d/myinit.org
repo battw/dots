@@ -171,51 +171,70 @@
       (add-hook 'before-save-hook 'gofmt-before-save))
   #+END_SRC
 
-* Hydra
+* Hydra + Key Chords
   #+BEGIN_SRC emacs-lisp
+    (use-package key-chord
+      :ensure t
+      :config
+      (key-chord-mode 1)
+      (setq key-chord-two-keys-delay 0.04))
+
     (use-package hydra :ensure t)
 
-    (key-chord-define-global "jk" 'hydra-common/body)
-    (defhydra hydra-common (:color blue)
-      "Common"
-      ("s" swiper "search")
-      ("h" help "help")
-      ("f" hydra-file/body "file" :exit t)
-      ("w" hydra-win/body "win" :exit t)
+    (key-chord-define-global "rf" 'next-multiframe-window)
+
+    (key-chord-define-global "jk" 'hydra-top/body)
+    (defhydra hydra-top (:color blue)
+      "Top"
       ("b" hydra-buf/body "buf" :exit t)
+      ("f" hydra-file/body "file" :exit t)
+      ("h" help "help")
+      ("o" hydra-org/body "org" :exit t)
+      ("p" hydra-proj/body "proj" :exit t)
+      ("s" swiper "search")
+      ("w" hydra-win/body "win" :exit t)
       ("q" nil))
 
     (defhydra hydra-file (:color blue)
       "File"
-      ("s" save-buffer "save")
       ("f" counsel-find-file "find")
+      ("s" save-buffer "save")
       ("q" nil))
 
     (defhydra hydra-win (:color blue)
       "Win"
-      ("o" ace-window "other")
-      ("n" next-multiframe-window "next")
-      ("p" previous-multiframe-window "prev")
-      ("k" delete-other-windows "keep")
       ("b" split-window-below "below")
-      ("r" split-window-right "right")
       ("d" delete-window "del")
+      ("k" delete-other-windows "keep")
+      ("n" next-multiframe-window "next")
+      ("o" ace-window "other")
+      ("p" previous-multiframe-window "prev")
+      ("r" split-window-right "right")
       ("s" ace-swap-window "swap")
       ("q" nil))
 
     (defhydra hydra-buf (:color blue)
       "Buf"
       ("k" kill-buffer "kill")
-      ("s" ivy-switch-buffer "find")
+      ("b" ivy-switch-buffer "buf")
       ("q" nil))
 
+    (defhydra hydra-proj (:color blue)
+      "Proj"
+      ("f" projectile-find-file "file")
+      ("q" nil))
+
+    (defhydra hydra-org (:color blue)
+      "Org"
+      ("c" org-ctrl-c-ctrl-c "C-c C-c")
+      ("h" org-insert-heading-respect-content "heading")
+      ("q" nil))
   #+END_SRC
 * IBuffer
   #+BEGIN_SRC emacs-lisp
     ;; (defalias 'list-buffers 'ibuffer)
     ;; (setq ibuffer-default-sorting-mode 'major-mode)
   #+END_SRC
-
 * Ido
   #+BEGIN_SRC emacs-lisp
     ;; (setq ido-enable-flex-matching t)
@@ -238,11 +257,6 @@
   
 * Key Chord
   #+BEGIN_SRC emacs-lisp
-    (use-package key-chord
-      :ensure t
-      :config
-      (key-chord-mode 1)
-      (setq key-chord-two-keys-delay 0.04))
   #+END_SRC
 
 * Org Mode
@@ -356,6 +370,18 @@
       :config
       (which-key-mode))
   #+END_SRC
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
