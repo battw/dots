@@ -57,6 +57,10 @@
        `(("." . ,(expand-file-name
                   (concat user-emacs-directory "backups")))))
    #+END_SRC
+** Fonts
+#+BEGIN_SRC emacs-lisp
+(set-default-font "mono 13" nil t)
+#+END_SRC
 * Ace Window
   #+BEGIN_SRC emacs-lisp
     (use-package ace-window
@@ -171,65 +175,97 @@
       (add-hook 'before-save-hook 'gofmt-before-save))
   #+END_SRC
 
+* Htmlize
+#+BEGIN_SRC emacs-lisp
+  (use-package htmlize :ensure t)
+#+END_SRC
+
 * Hydra + Key Chords
-  #+BEGIN_SRC emacs-lisp
-    (use-package key-chord
-      :ensure t
-      :config
-      (key-chord-mode 1)
-      (setq key-chord-two-keys-delay 0.04))
+#+BEGIN_SRC emacs-lisp
+  (use-package key-chord
+    :ensure t
+    :config
+    (key-chord-mode 1)
+    (setq key-chord-two-keys-delay 0.04))
 
-    (use-package hydra :ensure t)
+  (use-package hydra :ensure t)
+  
+  ;; window switching
+  (key-chord-define-global "fd" 'next-multiframe-window)
 
-    (key-chord-define-global "rf" 'next-multiframe-window)
+  ;; search
+  (key-chord-define-global "ds" 'swiper)
 
-    (key-chord-define-global "jk" 'hydra-top/body)
-    (defhydra hydra-top (:color blue)
-      "Top"
-      ("b" hydra-buf/body "buf" :exit t)
-      ("f" hydra-file/body "file" :exit t)
-      ("h" help "help")
-      ("o" hydra-org/body "org" :exit t)
-      ("p" hydra-proj/body "proj" :exit t)
-      ("s" swiper "search")
-      ("w" hydra-win/body "win" :exit t)
-      ("q" nil))
+  (key-chord-define-global "jk" 'hydra-top/body)
 
-    (defhydra hydra-file (:color blue)
-      "File"
-      ("f" counsel-find-file "find")
-      ("s" save-buffer "save")
-      ("q" nil))
+  (defhydra hydra-top (:color blue)
+    "Top"
+    ("b" hydra-buf/body "buf" :exit t)
+    ("f" hydra-file/body "file" :exit t)
+    ("h" help "help")
+    ("o" hydra-org/body "org" :exit t)
+    ("p" hydra-proj/body "proj" :exit t)
+    ("r" hydra-rect/body "rect" :exit t)
+    ("s" swiper "search")
+    ("w" hydra-win/body "win" :exit t)
+    ("t" hydra-shell/body "term" :exit t)
+    ("RET" nil))
 
-    (defhydra hydra-win (:color blue)
-      "Win"
-      ("b" split-window-below "below")
-      ("d" delete-window "del")
-      ("k" delete-other-windows "keep")
-      ("n" next-multiframe-window "next")
-      ("o" ace-window "other")
-      ("p" previous-multiframe-window "prev")
-      ("r" split-window-right "right")
-      ("s" ace-swap-window "swap")
-      ("q" nil))
+  (defhydra hydra-file (:color blue)
+    "File"
+    ("f" counsel-find-file "find")
+    ("s" save-buffer "save")
+    ("RET" nil))
 
-    (defhydra hydra-buf (:color blue)
-      "Buf"
-      ("k" kill-buffer "kill")
-      ("b" ivy-switch-buffer "buf")
-      ("q" nil))
+  (defhydra hydra-win (:color blue)
+  "Win"
+    ("b" split-window-below "split below")
+    ("r" split-window-right "split right")
+    ("d" delete-window "del")
+    ("k" delete-other-windows "keep")
+    ("s" ace-swap-window "swap")
+    ("h" enlarge-window-horizontally "grow horiz" :color red)
+    ("H" shrink-window-horizontally "shrink horiz" :color red)
+    ("v" enlarge-window "grow vert" :color red)
+    ("V" shrink-window "shrink vert" :color red)
+    ;; ("n" next-multiframe-window "next")
+    ;; ("o" ace-window "other")
+    ;; ("p" previous-multiframe-window "prev")
+    ("RET" nil))
 
-    (defhydra hydra-proj (:color blue)
-      "Proj"
-      ("f" projectile-find-file "file")
-      ("q" nil))
+  (defhydra hydra-buf (:color blue)
+    "Buf"
+    ("k" kill-buffer "kill")
+    ("b" ivy-switch-buffer "buf")
+    ("RET" nil))
 
-    (defhydra hydra-org (:color blue)
-      "Org"
-      ("c" org-ctrl-c-ctrl-c "C-c C-c")
-      ("h" org-insert-heading-respect-content "heading")
-      ("q" nil))
-  #+END_SRC
+  (defhydra hydra-proj (:color blue)
+    "Proj"
+    ("f" projectile-find-file "file")
+    ("RET" nil))
+
+  (defhydra hydra-org (:color blue)
+    "Org"
+    ("b" org-metaleft "left" :color red)
+    ("c" org-ctrl-c-ctrl-c "C-c C-c")
+    ("f" org-metaright "right" :color red)
+    ("i" org-meta-return "insert" :color red)
+    ("h" org-insert-heading-respect-content "heading" :color red)
+    ("l" org-toggle-latex-fragment "tog latex")
+    ("'" org-edit-special "edit")
+    ("RET" nil))
+
+  (defhydra hydra-rect (:color blue)
+    "Rect"
+    ("k" kill-rectangle "kill")
+    ("RET" nil))
+
+  (defhydra hydra-shell (:color blue)
+    "Shell"
+    ("a" (ansi-term "/bin/bash") "ansi")
+    ("e" eshell "eshell")
+    ("RET" nil))
+#+END_SRC
 * IBuffer
   #+BEGIN_SRC emacs-lisp
     ;; (defalias 'list-buffers 'ibuffer)
@@ -260,8 +296,31 @@
   #+END_SRC
 
 * Org Mode
-
-** Bullets
+** Links
+   - [[https://orgmode.org/][Website]]
+   - [[https://orgmode.org/org.html][Manual]]
+   - [[https:orgmode.org/orgcard.pdf][orgcard]]
+    
+** Notes
+*** LaTeX
+    https://orgmode.org/worg/org-tutorials/org-latex-preview.html
+**** Setup LaTeX preview for formulas
+     https://orgmode.org/manual/Embedded-LaTeX.html
+     1. Install latex on system
+        e.g. the texlive-most pacman group
+     2. Makes sure we have dvipng, dvisvgm or convert installed.
+        They are included in texlive-most
+     3. Toggle between ascii and latex with
+        org-toggle-latex-fragment (C-c C-x C-l)
+**** Tikz diagrams
+- install ghostscript
+***** convert: attempt to perform an operation not allowed by the security policy `PDF' @ error/constitute.c/IsCoderAuthorized/408.
+- To fix this error it is necessary to change ImageMagick's security policy.
+  - Open
+    - /etc/ImageMagick/policy.xml
+  - Comment out the line 
+    - <policy domain="coder" rights="none" pattern="{PS,PS2,PS3,EPS,PDF,XPS}"/>
+** Org Bullets
    #+BEGIN_SRC emacs-lisp
      (use-package org-bullets
        :ensure t
@@ -270,26 +329,28 @@
    #+END_SRC
 
 ** Org
-   #+BEGIN_SRC emacs-lisp
-     (use-package org
-       :ensure t
-       ;; :bind
-       ;; (:map org-mode-map
-       ;;       ("C-x C-e" . org-babel-execute-src-block))
-       :config
-       (setq org-return-follows-link t)
-       (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
-                     org-confirm-babel-evaluate nil
-                     ;;org-src-preserve-indentation nil
-                     ;;org-edit-src-content-indentation 0
-                     ;;org-src-fontify-natively t
-                     ;;org-src-tabs-act-natively t
-                     )
-       (org-babel-do-load-languages
-        'org-babel-load-languages
-        '((python . t))))
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (use-package org
+    :ensure t
+    ;; :bind
+    ;; (:map org-mode-map
+    ;;       ("C-x C-e" . org-babel-execute-src-block))
+    :config
+    (setq org-return-follows-link t
+          org-confirm-babel-evaluate nil ;; don't prompt before evaluating src blocks
+          org-html-doctype "html5"
+          org-startup-indented t)
+ 
+    ;; LaTeX SETUP
+    (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
+          org-latex-create-formula-image-program 'imagemagick)
+    (add-to-list 'org-latex-packages-alist '("" "tikz" t))
 
+    ;; BABEL 
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((python . t))))
+#+END_SRC
 * PDF Tools
   #+BEGIN_SRC emacs-lisp
     (use-package pdf-tools
@@ -338,25 +399,25 @@
   #+END_SRC
   
 * Themes
-  #+BEGIN_SRC emacs-lisp
-        ;; (use-package color-theme :ensure t) ;; provides a load of themes
-        ;; (use-package gruvbox-theme :ensure t)
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package color-theme :ensure t) ;; provides a load of themes
+  (use-package gruvbox-theme :ensure t)
 
-        ;; (use-package zenburn-theme 
-        ;;   :ensure t
-        ;;   :init
-        ;;   (setq zenburn-override-colors-alist
-        ;;         '(("zenburn-bg" . "#111111"))))
+  ;;(use-package zenburn-theme 
+  ;;   :ensure t
+  ;;   :init
+  ;;   (setq zenburn-override-colors-alist
+  ;;         '(("zenburn-bg" . "#111111"))))
 
-        ;;(use-package jazz-theme :ensure t)
-        ;; (use-package monokai-theme :ensure t)
-        ;; (use-package darktooth-theme :ensure t)
-        ;;(use-package dracula-theme :ensure t)
-    (use-package color-theme-sanityinc-tomorrow 
-      :ensure t
-      :config
-      (load-theme 'sanityinc-tomorrow-eighties t)) ;; the t prevents the warning message on startup
-  #+END_SRC
+  ;;(use-package jazz-theme :ensure t)
+  ;; (use-package monokai-theme :ensure t)
+  ;; (use-package darktooth-theme :ensure t)
+  ;;(use-package dracula-theme :ensure t)
+  ;; (use-package color-theme-sanityinc-tomorrow 
+  ;;   :ensure t
+  ;;   :config
+  ;;   (load-theme 'sanityinc-tomorrow-eighties t)) ;; the t prevents the warning message on startup
+#+END_SRC
 
 * Try
   #+BEGIN_SRC emacs-lisp
