@@ -160,6 +160,14 @@
             ;;(propertize "----> " 'face `(:foreground "yellow"))))
   #+END_SRC
 
+* Evil Mode
+#+BEGIN_SRC emacs-lisp
+  (use-package evil
+    :ensure t
+    :config
+    (evil-mode t)
+    (evil-set-initial-state 'term-mode 'emacs))
+#+END_SRC
 * Flycheck
     #+BEGIN_SRC emacs-lisp
       (use-package flycheck
@@ -180,91 +188,105 @@
   (use-package htmlize :ensure t)
 #+END_SRC
 
-* Hydra + Key Chords
+* Hydra + Key Chords + My Bindings
 #+BEGIN_SRC emacs-lisp
-  (use-package key-chord
-    :ensure t
-    :config
-    (key-chord-mode 1)
-    (setq key-chord-two-keys-delay 0.04))
+    (use-package key-chord
+      :ensure t
+      :config
+      (key-chord-mode 1)
+      (setq key-chord-two-keys-delay 0.04))
 
-  (use-package hydra :ensure t)
-  
-  ;; window switching
-  (key-chord-define-global "fd" 'next-multiframe-window)
+    (use-package hydra :ensure t)
 
-  ;; search
-  (key-chord-define-global "ds" 'swiper)
+    ;; C-g 
+    (key-chord-define-global "fr" 'keyboard-escape-quit)
 
-  (key-chord-define-global "jk" 'hydra-top/body)
+    ;; window switching
+    (key-chord-define-global "fd" 'next-multiframe-window)
 
-  (defhydra hydra-top (:color blue)
-    "Top"
-    ("b" hydra-buf/body "buf" :exit t)
-    ("f" hydra-file/body "file" :exit t)
-    ("h" help "help")
-    ("o" hydra-org/body "org" :exit t)
-    ("p" hydra-proj/body "proj" :exit t)
-    ("r" hydra-rect/body "rect" :exit t)
-    ("s" swiper "search")
-    ("w" hydra-win/body "win" :exit t)
-    ("t" hydra-shell/body "term" :exit t)
-    ("RET" nil))
+    ;; search
+    (key-chord-define-global "ds" 'swiper)
 
-  (defhydra hydra-file (:color blue)
-    "File"
-    ("f" counsel-find-file "find")
-    ("s" save-buffer "save")
-    ("RET" nil))
+    ;; evil mode
+    (key-chord-define-global "jk" 'evil-normal-state)
 
-  (defhydra hydra-win (:color blue)
-  "Win"
-    ("b" split-window-below "split below")
-    ("r" split-window-right "split right")
-    ("d" delete-window "del")
-    ("k" delete-other-windows "keep")
-    ("s" ace-swap-window "swap")
-    ("h" enlarge-window-horizontally "grow horiz" :color red)
-    ("H" shrink-window-horizontally "shrink horiz" :color red)
-    ("v" enlarge-window "grow vert" :color red)
-    ("V" shrink-window "shrink vert" :color red)
-    ;; ("n" next-multiframe-window "next")
-    ;; ("o" ace-window "other")
-    ;; ("p" previous-multiframe-window "prev")
-    ("RET" nil))
+    ;; my hydra tree
+    (key-chord-define-global "kl" 'hydra-top/body)
 
-  (defhydra hydra-buf (:color blue)
-    "Buf"
-    ("k" kill-buffer "kill")
-    ("b" ivy-switch-buffer "buf")
-    ("RET" nil))
 
-  (defhydra hydra-proj (:color blue)
-    "Proj"
-    ("f" projectile-find-file "file")
-    ("RET" nil))
+    (defhydra hydra-top (:color blue)
+      "Top"
+      ("b" hydra-buf/body "buf" :exit t)
+      ("f" hydra-file/body "file" :exit t)
+      ("h" help "help")
+      ("o" hydra-org/body "org" :exit t)
+      ("p" hydra-proj/body "proj" :exit t)
+      ("r" hydra-rect/body "rect" :exit t)
+      ("s" swiper "search")
+      ("w" hydra-win/body "win" :exit t)
+      ("t" hydra-shell/body "term" :exit t)
+      ("RET" nil))
 
-  (defhydra hydra-org (:color blue)
-    "Org"
-    ("b" org-metaleft "left" :color red)
-    ("c" org-ctrl-c-ctrl-c "C-c C-c")
-    ("f" org-metaright "right" :color red)
-    ("i" org-meta-return "insert" :color red)
-    ("h" org-insert-heading-respect-content "heading" :color red)
-    ("l" org-toggle-latex-fragment "tog latex")
-    ("'" org-edit-special "edit")
-    ("RET" nil))
+    (defhydra hydra-file (:color blue)
+      "File"
+      ("f" counsel-find-file "find")
+      ("s" save-buffer "save")
+      ("RET" nil))
 
-  (defhydra hydra-rect (:color blue)
-    "Rect"
-    ("k" kill-rectangle "kill")
-    ("RET" nil))
+    (defhydra hydra-win (:color blue)
+      "Win"
+      ("b" split-window-below "split below")
+      ("r" split-window-right "split right")
+      ("d" delete-window "del")
+      ("k" delete-other-windows "keep")
+      ("s" ace-swap-window "swap")
+      ("h" enlarge-window-horizontally "grow horiz" :color red)
+      ("H" shrink-window-horizontally "shrink horiz" :color red)
+      ("v" enlarge-window "grow vert" :color red)
+      ("V" shrink-window "shrink vert" :color red)
+      ;; ("n" next-multiframe-window "next")
+      ;; ("o" ace-window "other")
+      ;; ("p" previous-multiframe-window "prev")
+      ("RET" nil))
 
-  (defhydra hydra-shell (:color blue)
-    "Shell"
-    ("a" (ansi-term "/bin/bash") "ansi")
-    ("e" eshell "eshell")
-    ("RET" nil))
+    (defhydra hydra-buf (:color blue)
+      "Buf"
+      ("k" kill-buffer "kill")
+      ("b" ivy-switch-buffer "buf")
+      ("RET" nil))
+
+    (defhydra hydra-proj (:color blue)
+      "Proj"
+      ("f" projectile-find-file "file")
+      ("RET" nil))
+
+    (defhydra hydra-org (:color blue)
+      "Org"
+      ("b" org-metaleft "left" :color red)
+      ("f" org-metaright "right" :color red)
+
+      ("c" org-ctrl-c-ctrl-c "C-c C-c")
+
+      ("i" org-meta-return "insert" :color red)
+      ("h" org-insert-heading-respect-content "heading" :color red)
+      ("." org-time-stamp "date")
+      ("l" org-toggle-latex-fragment "tog latex")
+      ("'" org-edit-special "edit")
+      ("RET" nil))
+
+    (defhydra hydra-rect (:color blue)
+      "Rect"
+      ("k" kill-rectangle "kill")
+      ("RET" nil))
+
+    (defhydra hydra-shell (:color blue)
+      "Shell"
+      ("a" (ansi-term "/bin/bash") "ansi")
+      ("e" eshell "eshell")
+      ("RET" nil))
+
+
+
 #+END_SRC
 * IBuffer
   #+BEGIN_SRC emacs-lisp
@@ -381,21 +403,33 @@
         (setq tab-always-indent 'complete))
     #+END_SRC
     
+* Rust Mode
+#+BEGIN_SRC emacs-lisp
+  (use-package rust-mode
+    :ensure t
+    :config 
+    (setq rust-format-on-save t))
+
+    ;; needed for compatablity between flycheck and cargo projects
+    (use-package flycheck-rust
+    :ensure t
+    :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+#+END_SRC
 * Swiper
   #+BEGIN_SRC emacs-lisp
-      (use-package swiper
-      :ensure t
-      :bind (("C-s" . swiper)
-             ("C-r" . swiper)
-             ("C-c C-r" . ivy-resume)
-             ("M-x" . counsel-M-x)
-             ("C-x C-f" . counsel-find-file))
-      :config
-      (ivy-mode 1)
-      (setq ivy-use-virtual-buffers t)
-      (setq ivy-display-style 'fancy)
-      (setq swiper-goto-start-of-match t)
-      (define-key read-expression-map (kbd "C-r") 'counsel-expression-history))
+    (use-package swiper
+    :ensure t
+    ;; :bind (("C-s" . swiper)
+    ;;        ("C-r" . swiper)
+    ;;        ("C-c C-r" . ivy-resume)
+    ;;        ("M-x" . counsel-M-x)
+    ;;        ("C-x C-f" . counsel-find-file))
+     :config
+     (ivy-mode 1)
+     (setq ivy-use-virtual-buffers t)
+    (setq ivy-display-style 'fancy)
+    (setq swiper-goto-start-of-match t)
+    (define-key read-expression-map (kbd "C-r") 'counsel-expression-history))
   #+END_SRC
   
 * Themes
