@@ -225,6 +225,8 @@
       ("s" swiper "search")
       ("w" hydra-win/body "win" :exit t)
       ("t" hydra-shell/body "term" :exit t)
+      ("x" execute-extended-command "x" :exit t)
+
       ("RET" nil))
 
     (defhydra hydra-file (:color blue)
