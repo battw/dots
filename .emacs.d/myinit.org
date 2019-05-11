@@ -221,10 +221,9 @@
       ("h" help "help")
       ("o" hydra-org/body "org" :exit t)
       ("p" hydra-proj/body "proj" :exit t)
-      ("r" hydra-rect/body "rect" :exit t)
-      ("s" swiper "search")
-      ("w" hydra-win/body "win" :exit t)
+      ("q" query-replace "q-replace")
       ("t" hydra-shell/body "term" :exit t)
+      ("w" hydra-win/body "win" :exit t)
       ("x" execute-extended-command "x" :exit t)
 
       ("RET" nil))
@@ -269,16 +268,11 @@
 
       ("c" org-ctrl-c-ctrl-c "C-c C-c")
 
-      ("i" org-meta-return "insert" :color red)
-      ("h" org-insert-heading-respect-content "heading" :color red)
+      ("i" org-meta-return "insert")
+      ("h" org-insert-heading-respect-content "heading")
       ("." org-time-stamp "date")
       ("l" org-toggle-latex-fragment "tog latex")
       ("'" org-edit-special "edit")
-      ("RET" nil))
-
-    (defhydra hydra-rect (:color blue)
-      "Rect"
-      ("k" kill-rectangle "kill")
       ("RET" nil))
 
     (defhydra hydra-shell (:color blue)
