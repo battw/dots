@@ -190,98 +190,111 @@
 
 * Hydra + Key Chords + My Bindings
 #+BEGIN_SRC emacs-lisp
-    (use-package key-chord
-      :ensure t
-      :config
-      (key-chord-mode 1)
-      (setq key-chord-two-keys-delay 0.04))
+  (use-package key-chord
+    :ensure t
+    :config
+    (key-chord-mode 1)
+    (setq key-chord-two-keys-delay 0.04))
 
-    (use-package hydra :ensure t)
+  (use-package hydra :ensure t)
 
-    ;; C-g 
-    (key-chord-define-global "fr" 'keyboard-escape-quit)
+  ;; C-g 
+  (key-chord-define-global "fr" 'keyboard-escape-quit)
 
-    ;; window switching
-    (key-chord-define-global "fd" 'next-multiframe-window)
+  ;; window switching
+  (key-chord-define-global "fd" 'next-multiframe-window)
 
-    ;; search
-    (key-chord-define-global "ds" 'swiper)
+  ;; search
+  (key-chord-define-global "ds" 'swiper)
 
-    ;; evil mode
-    (key-chord-define-global "jk" 'evil-normal-state)
+  ;; evil mode
+  (key-chord-define-global "jk" 'evil-normal-state)
 
-    ;; my hydra tree
-    (key-chord-define-global "kl" 'hydra-top/body)
-
-
-    (defhydra hydra-top (:color blue)
-      "Top"
-      ("b" hydra-buf/body "buf" :exit t)
-      ("f" hydra-file/body "file" :exit t)
-      ("h" help "help")
-      ("o" hydra-org/body "org" :exit t)
-      ("p" hydra-proj/body "proj" :exit t)
-      ("q" query-replace "q-replace")
-      ("t" hydra-shell/body "term" :exit t)
-      ("w" hydra-win/body "win" :exit t)
-      ("x" execute-extended-command "x" :exit t)
-
-      ("RET" nil))
-
-    (defhydra hydra-file (:color blue)
-      "File"
-      ("f" counsel-find-file "find")
-      ("s" save-buffer "save")
-      ("RET" nil))
-
-    (defhydra hydra-win (:color blue)
-      "Win"
-      ("b" split-window-below "split below")
-      ("r" split-window-right "split right")
-      ("d" delete-window "del")
-      ("k" delete-other-windows "keep")
-      ("s" ace-swap-window "swap")
-      ("h" enlarge-window-horizontally "grow horiz" :color red)
-      ("H" shrink-window-horizontally "shrink horiz" :color red)
-      ("v" enlarge-window "grow vert" :color red)
-      ("V" shrink-window "shrink vert" :color red)
-      ;; ("n" next-multiframe-window "next")
-      ;; ("o" ace-window "other")
-      ;; ("p" previous-multiframe-window "prev")
-      ("RET" nil))
-
-    (defhydra hydra-buf (:color blue)
-      "Buf"
-      ("k" kill-buffer "kill")
-      ("b" ivy-switch-buffer "buf")
-      ("RET" nil))
-
-    (defhydra hydra-proj (:color blue)
-      "Proj"
-      ("f" projectile-find-file "file")
-      ("RET" nil))
-
-    (defhydra hydra-org (:color blue)
-      "Org"
-      ("b" org-metaleft "left" :color red)
-      ("f" org-metaright "right" :color red)
-
-      ("c" org-ctrl-c-ctrl-c "C-c C-c")
-
-      ("i" org-meta-return "insert")
-      ("h" org-insert-heading-respect-content "heading")
-      ("." org-time-stamp "date")
-      ("l" org-toggle-latex-fragment "tog latex")
-      ("'" org-edit-special "edit")
-      ("RET" nil))
-
-    (defhydra hydra-shell (:color blue)
-      "Shell"
-      ("a" (ansi-term "/bin/bash") "ansi")
-      ("e" eshell "eshell")
-      ("RET" nil))
+  ;; my hydra tree
+  (key-chord-define-global "kl" 'hydra-top/body)
 
 
+  (defhydra hydra-top (:color blue)
+    "Top"
+    ("b" hydra-buf/body "buf" :exit t)
+    ("f" hydra-file/body "file" :exit t)
+    ("h" help "help")
+    ("o" hydra-org/body "org" :exit t)
+    ("p" hydra-proj/body "proj" :exit t)
+    ("q" query-replace "q-replace")
+    ("s" hydra-scratch/body "scratch" :exit t)
+    ("t" hydra-shell/body "term" :exit t)
+    ("w" hydra-win/body "win" :exit t)
+    ("x" execute-extended-command "x" :exit t)
+
+    ("RET" nil))
+
+  (defhydra hydra-file (:color blue)
+    "File"
+    ("f" counsel-find-file "find")
+    ("s" save-buffer "save")
+    ("RET" nil))
+
+  (defhydra hydra-win (:color blue)
+    "Win"
+    ("b" split-window-below "split below")
+    ("r" split-window-right "split right")
+    ("d" delete-window "del")
+    ("k" delete-other-windows "keep")
+    ("s" ace-swap-window "swap")
+    ("h" enlarge-window-horizontally "grow horiz" :color red)
+    ("H" shrink-window-horizontally "shrink horiz" :color red)
+    ("v" enlarge-window "grow vert" :color red)
+    ("V" shrink-window "shrink vert" :color red)
+    ;; ("n" next-multiframe-window "next")
+    ;; ("o" ace-window "other")
+    ;; ("p" previous-multiframe-window "prev")
+    ("RET" nil))
+
+  (defhydra hydra-buf (:color blue)
+    "Buf"
+    ("k" kill-buffer "kill")
+    ("b" ivy-switch-buffer "buf")
+    ("RET" nil))
+
+  (defhydra hydra-proj (:color blue)
+    "Proj"
+    ("f" projectile-find-file "file")
+    ("RET" nil))
+
+  (defhydra hydra-org (:color blue)
+    "Org"
+    ("b" org-metaleft "left")
+    ("f" org-metaright "right")
+
+    ("B" org-metaleft "left" :color red)
+    ("F" org-metaright "right" :color red)
+
+    ("c" org-ctrl-c-ctrl-c "C-c C-c")
+
+    ;;("i" org-meta-return "insert")
+    ;;("h" org-insert-heading-respect-content "heading")
+    ("." org-time-stamp "date")
+    ("l" org-toggle-latex-fragment "tog latex")
+    ("'" org-edit-special "edit")
+    ("t" hydra-org-table/body "tables" :exit t)
+    ("RET" nil))
+
+  (defhydra hydra-org-table (:color blue)
+    "Table"
+    ("o" org-table-toggle-coordinate-overlays "overlay")
+    ("c" org-table-insert-column "ins col")
+    ("r" org-table-insert-row "ins row")
+    ("i" org-table-iterate "iter"))
+
+  (defhydra hydra-shell (:color blue)
+    "Shell"
+    ("a" (ansi-term "/bin/bash") "ansi")
+    ("e" eshell "eshell")
+    ("RET" nil))
+
+  (defhydra hydra-scratch (:color blue)
+    ("e" eval-last-sexp "eval"))
 
 #+END_SRC
 * IBuffer
