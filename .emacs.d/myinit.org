@@ -57,9 +57,11 @@
        `(("." . ,(expand-file-name
                   (concat user-emacs-directory "backups")))))
    #+END_SRC
-** Fonts
+* Fonts
 #+BEGIN_SRC emacs-lisp
-(set-default-font "mono 13" nil t)
+  (set-default-font "mono 13" nil t)
+  (if (string= system-name "yoga")
+      (set-default-font "mono 14" nil t))
 #+END_SRC
 * Ace Window
   #+BEGIN_SRC emacs-lisp
