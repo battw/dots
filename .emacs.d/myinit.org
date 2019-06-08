@@ -57,6 +57,11 @@
        `(("." . ,(expand-file-name
                   (concat user-emacs-directory "backups")))))
    #+END_SRC
+* Yoga
+#+BEGIN_SRC emacs-lisp
+  (if (string= system-name "yoga")
+      (toggle-frame-fullscreen))
+#+END_SRC
 * Fonts
 #+BEGIN_SRC emacs-lisp
   (set-default-font "mono 13" nil t)
