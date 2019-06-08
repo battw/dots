@@ -1,0 +1,8 @@
+[Unit]
+Description=Disable acpi interrupt gpe16
+[Service]
+ExecStart=/usr/bin/bash -c 'echo "disable" > /sys/firmware/acpi/interrupts/gpe16'
+Type=oneshot
+RemainAfterExit=yes
+[Install]
+WantedBy=multi-user.target
