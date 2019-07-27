@@ -57,11 +57,10 @@
        `(("." . ,(expand-file-name
                   (concat user-emacs-directory "backups")))))
    #+END_SRC
-** Fullscreen/Maximised in gnome
+** Fullscreen/Maximised
 #+BEGIN_SRC emacs-lisp
-  (if (string= (getenv "DESKTOP_SESSION") "gnome")
      ;;(toggle-frame-fullscreen)
-     (toggle-frame-maximized))
+     (toggle-frame-maximized)
 #+END_SRC
 * Fonts
 #+BEGIN_SRC emacs-lisp

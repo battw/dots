@@ -7,6 +7,7 @@ alias ls='ls --color=auto'
 alias dir='dir --color=auto'
 
 export PATH=$PATH:~/dropbox/bin
+export PATH=$PATH:~/bin
 
 export GOPATH=~/go
 export PATH=$PATH:$GOPATH/bin
