@@ -182,7 +182,12 @@
         :ensure t
         :init (global-flycheck-mode))
     #+END_SRC
-
+* Geiser
+** Emacs and scheme talk to each other
+#+BEGIN_SRC emacs-lisp
+  (use-package geiser
+    :ensure t)
+#+END_SRC
 * Go Mode
   #+BEGIN_SRC emacs-lisp
     (use-package go-mode
@@ -330,6 +335,50 @@
       (setq ivy-display-style 'fancy))
   #+END_SRC
   
+* Javascript
+- [[https://emacs.cafe/emacs/javascript/setup/2017/04/23/emacs-setup-javascript.html][Setting up Emacs for JavaScript (part 1)]]
+- [[https://emacs.cafe/emacs/javascript/setup/2017/05/09/emacs-setup-javascript-2.html][part 2]] 
+- For xref-js2 you need the_silver_searcher on your os (in arch repo)
+- For company-tern you need to install tern on your os
+- sudo npm install -g tern
+- [[https://atom.io/packages/atom-ternjs][Set up a .tern-config file for each project (example)]]
+- [[http://ternjs.net/doc/manual.html#configuration][.tern-config docs]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package js2-mode
+    :ensure t
+    :init
+    (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+    (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
+
+  (use-package js2-refactor
+    :ensure t
+    :init
+    (add-hook 'js2-mode-hook #'js2-refactor-mode))
+
+  ;; requires the_silver_searcher on your os 
+  ;; (use-package xref-js2
+  ;;   :ensure t
+  ;;   :init
+  ;;   (define-key js-mode-map (kbd "M-.") nil)
+  ;;   (add-hook 'js2-mode-hook
+  ;;             (lambda ()
+  ;;               (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
+
+  (use-package 
+    company-tern
+    :ensure t
+    :init
+    (add-to-list 'company-backends 'company-tern)
+    (add-hook 'js2-mode-hook (lambda ()
+                             (tern-mode)
+                             (company-mode)))
+    ;;:config
+    ;; keybindings are also used by xref-js2 so...
+    ;;(define-key tern-mode-keymap (kbd "M-.") nil)
+    ;;(define-key tern-mode-keymap (kbd "M-,") nil)
+    )
+#+END_SRC
 * Key Chord
   #+BEGIN_SRC emacs-lisp
   #+END_SRC
@@ -379,16 +428,19 @@
           org-confirm-babel-evaluate nil ;; don't prompt before evaluating src blocks
           org-html-doctype "html5"
           org-startup-indented t)
- 
+
     ;; LaTeX SETUP
     (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
           org-latex-create-formula-image-program 'imagemagick)
     (add-to-list 'org-latex-packages-alist '("" "tikz" t))
 
     ;; BABEL 
+    ;; (setq geiser-default-implementation 'racket)
     (org-babel-do-load-languages
      'org-babel-load-languages
-     '((python . t))))
+     '((python . t)
+       (scheme . t) ;; scheme requires emacs geiser package 
+       )))
 #+END_SRC
 * PDF Tools
   #+BEGIN_SRC emacs-lisp
