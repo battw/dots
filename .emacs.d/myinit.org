@@ -79,6 +79,21 @@
          ((t (:inherit ace-jump-face-foreground :height 3.0))))))
   #+END_SRC
 
+* Anaconda
+Python ide-ness
+Has an accompanying company mode
+#+BEGIN_SRC emacs-lisp
+(use-package anaconda-mode
+  :ensure t
+  :hook python-mode
+)
+
+(use-package anaconda-eldoc-mode
+  :hook python-mode
+)
+  
+
+#+END_SRC
 * Auto Package Update
   #+BEGIN_SRC emacs-lisp
     ;; Make packages update themselves
@@ -125,16 +140,38 @@
      (use-package company-go
      :ensure t
      :init
-     (add-hook 'go-mode-hook
-     (lambda ()
-     (set (make-local-variable 'company-backends) '(company-go))
-     (company-mode))))
+;;     (add-to-list 'company-backends 'company-go) ;; Why doesn't this work?
+     
+       (add-hook 'go-mode-hook
+         (lambda ()
+           (set (make-local-variable 'company-backends) '(company-go))
+           (company-mode)))
+           
+     )
    #+END_SRC
 
 ** Company Elisp
    #+BEGIN_SRC emacs-lisp
    
    #+END_SRC
+
+** Company Jedi
+#+BEGIN_SRC emacs-lisp
+;;   (use-package company-jedi
+;;     :ensure t
+;;     :init
+;;       (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi)))
+;;       
+;;   )
+
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (use-package company-anaconda
+    :ensure t
+     :init
+       (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-anaconda)))
+  )
+#+END_SRC
 
 * Counsel
   #+BEGIN_SRC emacs-lisp
@@ -176,6 +213,7 @@
     (evil-set-initial-state 'term-mode 'emacs))
 #+END_SRC
 * Flycheck
+Syntax checking
     #+BEGIN_SRC emacs-lisp
       (use-package flycheck
         :ensure t
@@ -228,18 +266,25 @@
 
   (defhydra hydra-top (:color blue)
     "Top"
-    ("b" hydra-buf/body "buf" :exit t)
-    ("f" hydra-file/body "file" :exit t)
+    ("b" hydra-buf/body "buf")
+    ("f" hydra-file/body "file")
     ("h" help "help")
-    ("o" hydra-org/body "org" :exit t)
-    ("p" hydra-proj/body "proj" :exit t)
+    ("p" hydra-proj/body "proj")
     ("q" query-replace "q-replace")
-    ("s" hydra-scratch/body "scratch" :exit t)
-    ("t" hydra-shell/body "term" :exit t)
-    ("w" hydra-win/body "win" :exit t)
-    ("x" execute-extended-command "x" :exit t)
-
+    ("t" hydra-shell/body "term")
+    ("w" hydra-win/body "win")
+    ("x" execute-extended-command "x")
+    ("SPC" major-major "maj")
     ("RET" nil))
+
+  (defun major-major () 
+    (interactive)
+    (pcase major-mode
+      ('org-mode (hydra-org/body))
+      ('lisp-interaction-mode (hydra-scratch/body))
+      ('racket-mode (hydra-racket/body))
+      ('python-mode (hydra-python/body))
+      ))
 
   (defhydra hydra-file (:color blue)
     "File"
@@ -297,17 +342,30 @@
     ("o" org-table-toggle-coordinate-overlays "overlay")
     ("c" org-table-insert-column "ins col")
     ("r" org-table-insert-row "ins row")
-    ("i" org-table-iterate "iter"))
+    ("i" org-table-iterate "iter")
+  )
 
   (defhydra hydra-shell (:color blue)
     "Shell"
     ("a" (ansi-term "/bin/bash") "ansi")
     ("e" eshell "eshell")
-    ("RET" nil))
+    ("RET" nil)
+  )
 
   (defhydra hydra-scratch (:color blue)
-    ("e" eval-last-sexp "eval"))
+    ("e" eval-last-sexp "eval")
+  )
 
+  (defhydra hydra-python (:color blue)
+    ("d" anaconda-mode-show-doc "doc")
+    ("f" hydra-python/find/body "find" :exit t) 
+  )
+
+  (defhydra hydra-python/find (:color blue)
+    ("a" anaconda-mode-find-assignments "assigs")
+    ("d" anaconda-mode-find-definitions "defs")
+    ("r" anaconda-mode-find-references "refs")
+  )
 #+END_SRC
 * IBuffer
   #+BEGIN_SRC emacs-lisp
@@ -378,6 +436,10 @@
     ;;(define-key tern-mode-keymap (kbd "M-,") nil)
     )
 #+END_SRC
+* Jedi
+WARNING! 
+DON'T USE JEDI.EL WITH COMPANY.
+USE COMPANY-JEDI INSTEAD
 * Key Chord
   #+BEGIN_SRC emacs-lisp
   #+END_SRC
@@ -434,7 +496,7 @@
     (add-to-list 'org-latex-packages-alist '("" "tikz" t))
 
     ;; BABEL 
-    ;; (setq geiser-default-implementation 'racket)
+    (setq geiser-default-implementation 'racket)
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((python . t)
@@ -461,14 +523,18 @@
     #+END_SRC
 
 * Racket Mode
+- [[https://www.racket-mode.com/][racket mode manual]]
     #+BEGIN_SRC emacs-lisp
       (use-package racket-mode
         :ensure t
-        :bind
-        (:map racket-mode-map
-              ("C-c r" . racket-run))
+        :init
+        (add-to-list 'auto-mode-alist '("\\.rkt\\'" . racket-mode))
         :config
         (setq tab-always-indent 'complete))
+        (defhydra hydra-racket (:color blue)
+          ("r" racket-run "run")
+          ("c" comment-or-uncomment-region "com")
+          ("RET" nil))
     #+END_SRC
     
 * Rust Mode
