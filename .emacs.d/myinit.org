@@ -81,7 +81,7 @@
 
 * Anaconda
 Python ide-ness
-Has an accompanying company mode
+Has an accompanying company mode which I'm using
 #+BEGIN_SRC emacs-lisp
 (use-package anaconda-mode
   :ensure t
@@ -303,6 +303,8 @@ Syntax checking
     ("H" shrink-window-horizontally "shrink horiz" :color red)
     ("v" enlarge-window "grow vert" :color red)
     ("V" shrink-window "shrink vert" :color red)
+    ("z" text-scale-increase "zoom" :color red)
+    ("Z" text-scale-decrease "unzoom" :color red)
     ;; ("n" next-multiframe-window "next")
     ;; ("o" ace-window "other")
     ;; ("p" previous-multiframe-window "prev")
@@ -329,12 +331,15 @@ Syntax checking
 
     ("c" org-ctrl-c-ctrl-c "C-c C-c")
 
-    ;;("i" org-meta-return "insert")
-    ;;("h" org-insert-heading-respect-content "heading")
-    ("." org-time-stamp "date")
+    ("h" org-insert-heading-respect-content "heading")
+    ("i" org-meta-return "insert")
+
     ("l" org-toggle-latex-fragment "tog latex")
-    ("'" org-edit-special "edit")
+    ("n" org-narrow-to-subtree "narrow")
+    ("w" widen "widen")
     ("t" hydra-org-table/body "tables" :exit t)
+    ("." org-time-stamp "date")
+    ("'" org-edit-special "edit")
     ("RET" nil))
 
   (defhydra hydra-org-table (:color blue)
@@ -358,7 +363,9 @@ Syntax checking
 
   (defhydra hydra-python (:color blue)
     ("d" anaconda-mode-show-doc "doc")
-    ("f" hydra-python/find/body "find" :exit t) 
+    ("f" hydra-python/find/body "find") 
+    ("s" run-python "repl") 
+    ("b" python-shell-send-buffer "send buf")
   )
 
   (defhydra hydra-python/find (:color blue)
