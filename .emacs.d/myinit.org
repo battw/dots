@@ -332,7 +332,8 @@ Syntax checking
     ("c" org-ctrl-c-ctrl-c "C-c C-c")
 
     ("h" org-insert-heading-respect-content "heading")
-    ("i" org-meta-return "insert")
+    ("i" (progn (org-meta-return) (evil-insert 1)) "insert")
+
 
     ("l" org-toggle-latex-fragment "tog latex")
     ("n" org-narrow-to-subtree "narrow")
