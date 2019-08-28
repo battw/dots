@@ -40,6 +40,8 @@
     (setq inhibit-startup-message t)
     ;; Saves the current desktop (stuff that is loaded, window layout etc.)
     ;;   (desktop-save-mode 1)
+    ;; don't jump when scrolling past bottom of screen
+    (setq scroll-step 1)
    #+END_SRC
 
 ** Tabs
@@ -502,6 +504,7 @@ USE COMPANY-JEDI INSTEAD
     (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
           org-latex-create-formula-image-program 'imagemagick)
     (add-to-list 'org-latex-packages-alist '("" "tikz" t))
+    (add-to-list 'org-latex-packages-alist '("" "dsfont" t))
 
     ;; BABEL 
     (setq geiser-default-implementation 'racket)
