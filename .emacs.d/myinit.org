@@ -498,7 +498,8 @@ USE COMPANY-JEDI INSTEAD
     (setq org-return-follows-link t
           org-confirm-babel-evaluate nil ;; don't prompt before evaluating src blocks
           org-html-doctype "html5"
-          org-startup-indented t)
+          org-startup-indented t
+          org-use-sub-superscripts '{}) ;; requires curly braces around subscripts
 
     ;; LaTeX SETUP
     (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
