@@ -143,12 +143,11 @@ Has an accompanying company mode which I'm using
      :ensure t
      :init
 ;;     (add-to-list 'company-backends 'company-go) ;; Why doesn't this work?
-     
+    
        (add-hook 'go-mode-hook
          (lambda ()
            (set (make-local-variable 'company-backends) '(company-go))
            (company-mode)))
-           
      )
    #+END_SRC
 
@@ -269,10 +268,13 @@ Syntax checking
   (defhydra hydra-top (:color blue)
     "Top"
     ("b" hydra-buf/body "buf")
+    ("c" comment-or-uncomment-region "comment")
     ("f" hydra-file/body "file")
     ("h" help "help")
+    ("j" dumb-jump-go "jump")
     ("p" hydra-proj/body "proj")
     ("q" query-replace "q-replace")
+    ("r" redraw-display "redraw")
     ("t" hydra-shell/body "term")
     ("w" hydra-win/body "win")
     ("x" execute-extended-command "x")
@@ -489,21 +491,28 @@ USE COMPANY-JEDI INSTEAD
 
 ** Org
 #+BEGIN_SRC emacs-lisp
+ 
   (use-package org
     :ensure t
     ;; :bind
     ;; (:map org-mode-map
     ;;       ("C-x C-e" . org-babel-execute-src-block))
     :config
-    (setq org-return-follows-link t
+    (setq 
+          org-return-follows-link t
           org-confirm-babel-evaluate nil ;; don't prompt before evaluating src blocks
-          org-html-doctype "html5"
+         ;; org-html-doctype "html5"
           org-startup-indented t
-          org-use-sub-superscripts '{}) ;; requires curly braces around subscripts
+          org-use-sub-superscripts '{} ;; requires curly braces around subscripts
+          untest "WUTTT"
+    ) 
+    (visual-line-mode 1)
+    
 
     ;; LaTeX SETUP
-    (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
-          org-latex-create-formula-image-program 'imagemagick)
+    (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.8)
+          org-latex-create-formula-image-program 'imagemagick
+    )
     (add-to-list 'org-latex-packages-alist '("" "tikz" t))
     (add-to-list 'org-latex-packages-alist '("" "dsfont" t))
 
@@ -513,7 +522,7 @@ USE COMPANY-JEDI INSTEAD
      'org-babel-load-languages
      '((python . t)
        (scheme . t) ;; scheme requires emacs geiser package 
-       )))
+  )))
 #+END_SRC
 * PDF Tools
   #+BEGIN_SRC emacs-lisp
@@ -604,6 +613,11 @@ USE COMPANY-JEDI INSTEAD
     (use-package try :ensure t)
   #+END_SRC
 
+* Visual line mode
+  #+BEGIN_SRC emacs-lisp
+  (use-package visual-line-mode
+      :hook org-mode)
+  #+END_SRC
 * Which Key
   #+BEGIN_SRC emacs-lisp
     (use-package which-key
@@ -611,6 +625,22 @@ USE COMPANY-JEDI INSTEAD
       :config
       (which-key-mode))
   #+END_SRC
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
