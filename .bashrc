@@ -12,6 +12,9 @@ export PATH=$PATH:~/bin
 export GOPATH=~/go
 export PATH=$PATH:$GOPATH/bin
 
+# enable touch scrolling in firefox
+export MOZ_USE_XINPUT2=1
+
 # colours for the prompt
 RESET="\[$(tput sgr0)\]"
 
@@ -35,3 +38,19 @@ fi
 alias al='cd ~/dropbox/go/src/github.com/llo-oll/algebra; pwd'
 
 xdg-settings set default-web-browser firefox.desktop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
