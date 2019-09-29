@@ -211,15 +211,24 @@ Has an accompanying company mode which I'm using
     :ensure t
     :config
     (evil-mode t)
-    (evil-set-initial-state 'term-mode 'emacs))
+    (evil-set-initial-state 'term-mode 'emacs)
+  )
+    
+  (use-package evil-surround
+    :ensure t
+    :config
+    (global-evil-surround-mode 1)
+  )
 #+END_SRC
 * Flycheck
 Syntax checking
-    #+BEGIN_SRC emacs-lisp
-      (use-package flycheck
-        :ensure t
-        :init (global-flycheck-mode))
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+  :ensure t
+  :init 
+      (global-flycheck-mode)
+)
+#+END_SRC
 * Geiser
 ** Emacs and scheme talk to each other
 #+BEGIN_SRC emacs-lisp
