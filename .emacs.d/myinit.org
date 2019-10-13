@@ -285,6 +285,7 @@ Syntax checking
     ("q" query-replace "q-replace")
     ("r" redraw-display "redraw")
     ("t" hydra-shell/body "term")
+    ("u" undo-tree-visualize "undo vis")
     ("w" hydra-win/body "win")
     ("x" execute-extended-command "x")
     ("SPC" major-major "maj")
