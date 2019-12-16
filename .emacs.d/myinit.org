@@ -61,8 +61,8 @@
    #+END_SRC
 ** Fullscreen/Maximised
 #+BEGIN_SRC emacs-lisp
-     ;;(toggle-frame-fullscreen)
-     (toggle-frame-maximized)
+  (toggle-frame-fullscreen)
+  ;; (toggle-frame-maximized)
 #+END_SRC
 * Fonts
 #+BEGIN_SRC emacs-lisp
