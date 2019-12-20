@@ -61,8 +61,8 @@
    #+END_SRC
 ** Fullscreen/Maximised
 #+BEGIN_SRC emacs-lisp
-  (toggle-frame-fullscreen)
-  ;; (toggle-frame-maximized)
+  (toggle-frame-maximized)
+  ;; (toggle-frame-fullscreen)
 #+END_SRC
 * Fonts
 #+BEGIN_SRC emacs-lisp
@@ -283,7 +283,7 @@ Syntax checking
   (defhydra hydra-top (:color blue)
     "Top"
     ("b" hydra-buf/body "buf")
-    ("c" comment-or-uncomment-region "comment")
+    ("c" comment-or-uncomment-region-or-line "comment")
     ("f" hydra-file/body "file")
     ("h" help "help")
     ("j" dumb-jump-go "jump")
@@ -305,6 +305,16 @@ Syntax checking
       ('racket-mode (hydra-racket/body))
       ('python-mode (hydra-python/body))
       ))
+      
+  (defun comment-or-uncomment-region-or-line ()
+    "Comments or uncomments the region or the current line if there's no active region."
+    (interactive)
+    (let (beg end)
+        (if (region-active-p)
+            (setq beg (region-beginning) end (region-end))
+            (setq beg (line-beginning-position) end (line-end-position)))
+        (comment-or-uncomment-region beg end)
+        (next-logical-line)))
 
   (defhydra hydra-file (:color blue)
     "File"
