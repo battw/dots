@@ -174,16 +174,6 @@ Has an accompanying company mode which I'm using
   )
 #+END_SRC
 
-* Counsel
-  #+BEGIN_SRC emacs-lisp
-    (use-package counsel
-    :ensure t
-      :bind
-      (("M-y" . counsel-yank-pop)
-       :map ivy-minibuffer-map
-       ("M-y" . ivy-next-line)))
-  #+END_SRC
-
 * Dumb Jump
     #+BEGIN_SRC emacs-lisp
       (use-package dumb-jump
@@ -318,7 +308,7 @@ Syntax checking
 
   (defhydra hydra-file (:color blue)
     "File"
-    ("f" counsel-find-file "find")
+    ("f" find-file "find")
     ("s" save-buffer "save")
     ("RET" nil))
 
@@ -417,19 +407,35 @@ Syntax checking
     ;; (ido-mode 1)
   #+END_SRC
 
-* Ivy
+* Ivy / Counsel / Swiper
+** Ivy
   #+BEGIN_SRC emacs-lisp
-      (use-package ivy
+  (use-package ivy
+    :ensure t
+    :config
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-count-format "%d/%d ")
+    (setq ivy-display-style 'fancy)
+  )
+  #+END_SRC
+
+** Counsel
+  #+BEGIN_SRC emacs-lisp
+    (use-package counsel
       :ensure t
-      :diminish (ivy-mode)
-      :bind (("C-x b" . ivy-switch-buffer))
       :config
-      (ivy-mode 1)
-      (setq ivy-use-virtual-buffers t)
-      (setq ivy-count-format "%d/%d ")
-      (setq ivy-display-style 'fancy))
+      (counsel-mode)
+    )
   #+END_SRC
   
+** Swiper
+  #+BEGIN_SRC emacs-lisp
+    (use-package swiper
+      :ensure t
+    )
+  #+END_SRC
+
 * Javascript
 - [[https://emacs.cafe/emacs/javascript/setup/2017/04/23/emacs-setup-javascript.html][Setting up Emacs for JavaScript (part 1)]]
 - [[https://emacs.cafe/emacs/javascript/setup/2017/05/09/emacs-setup-javascript-2.html][part 2]] 
@@ -597,22 +603,6 @@ USE COMPANY-JEDI INSTEAD
     :ensure t
     :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 #+END_SRC
-* Swiper
-  #+BEGIN_SRC emacs-lisp
-    (use-package swiper
-    :ensure t
-    ;; :bind (("C-s" . swiper)
-    ;;        ("C-r" . swiper)
-    ;;        ("C-c C-r" . ivy-resume)
-    ;;        ("M-x" . counsel-M-x)
-    ;;        ("C-x C-f" . counsel-find-file))
-     :config
-     (ivy-mode 1)
-     (setq ivy-use-virtual-buffers t)
-    (setq ivy-display-style 'fancy)
-    (setq swiper-goto-start-of-match t)
-    (define-key read-expression-map (kbd "C-r") 'counsel-expression-history))
-  #+END_SRC
   
 * Themes
 #+BEGIN_SRC emacs-lisp
@@ -652,6 +642,13 @@ USE COMPANY-JEDI INSTEAD
       :config
       (which-key-mode))
   #+END_SRC
+
+
+
+
+
+
+
 
 
 
