@@ -131,7 +131,7 @@ Has an accompanying company mode which I'm using
             ("C-p" . company-select-previous))
       :config
       (global-company-mode t)
-      (setq company-tooltip-limit 20)                        ;; completion list length
+      ;; (setq company-tooltip-limit 40)                        ;; completion list length
       (setq company-idle-delay .3)                           ;; delay before popup shows
       (setq company-echo-delay 0)                            ;; remove annoying blinking
       (setq company-begin-commands '(self-insert-command)))  ;; start autocompletion only after typing
@@ -174,6 +174,21 @@ Has an accompanying company mode which I'm using
   )
 #+END_SRC
 
+** Rust Racer
+[[https://github.com/racer-rust/emacs-racer][installation instructions]]
+#+BEGIN_SRC emacs-lisp
+(use-package racer
+:ensure t
+:init
+  ;; hooks are added here rather than after ":hook" as the required name is "racer-mode"
+  ;; rather than "racer" 
+  (add-hook 'rust-mode-hook #'racer-mode)
+  (add-hook 'racer-mode-hook #'eldoc-mode)
+  (add-hook 'racer-mode-hook #'company-mode)
+:config
+  (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+)
+#+END_SRC
 * Dumb Jump
     #+BEGIN_SRC emacs-lisp
       (use-package dumb-jump
@@ -294,7 +309,8 @@ Syntax checking
       ('lisp-interaction-mode (hydra-scratch/body))
       ('racket-mode (hydra-racket/body))
       ('python-mode (hydra-python/body))
-      ))
+      ('rust-mode (hydra-rust/body))
+  ))
       
   (defun comment-or-uncomment-region-or-line ()
     "Comments or uncomments the region or the current line if there's no active region."
@@ -393,6 +409,13 @@ Syntax checking
     ("a" anaconda-mode-find-assignments "assigs")
     ("d" anaconda-mode-find-definitions "defs")
     ("r" anaconda-mode-find-references "refs")
+  )
+  
+  (defhydra hydra-rust (:color blue)
+    ("j" racer-find-definition "jump")
+    ("J" racer-find-definition-other-window "jump win")
+    ("b" pop-tag-mark "back")
+    ("d" racer-describe "describe")
   )
 #+END_SRC
 * IBuffer
@@ -596,12 +619,15 @@ USE COMPANY-JEDI INSTEAD
   (use-package rust-mode
     :ensure t
     :config 
-    (setq rust-format-on-save t))
+      (setq rust-format-on-save t)
+  )
 
-    ;; needed for compatablity between flycheck and cargo projects
-    (use-package flycheck-rust
-    :ensure t
-    :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+  ;; provides compatablity between flycheck and cargo projects
+  (use-package flycheck-rust
+  :ensure t
+  :config 
+    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+  )
 #+END_SRC
   
 * Themes
@@ -642,6 +668,33 @@ USE COMPANY-JEDI INSTEAD
       :config
       (which-key-mode))
   #+END_SRC
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
