@@ -292,6 +292,7 @@ Syntax checking
     ("f" hydra-file/body "file")
     ("h" help "help")
     ("j" dumb-jump-go "jump")
+    ("l" hydra-layout/body "layout")
     ("p" hydra-proj/body "proj")
     ("q" query-replace "q-replace")
     ("r" redraw-display "redraw")
@@ -341,9 +342,6 @@ Syntax checking
     ("V" shrink-window "shrink vert" :color red)
     ("z" text-scale-increase "zoom" :color red)
     ("Z" text-scale-decrease "unzoom" :color red)
-    ;; ("n" next-multiframe-window "next")
-    ;; ("o" ace-window "other")
-    ;; ("p" previous-multiframe-window "prev")
     ("RET" nil))
 
   (defhydra hydra-buf (:color blue)
@@ -416,6 +414,15 @@ Syntax checking
     ("J" racer-find-definition-other-window "jump win")
     ("b" pop-tag-mark "back")
     ("d" racer-describe "describe")
+  )
+  
+  (defhydra hydra-layout (:color blue)
+    ("c" wg-create-workgroup "create")
+    ("k" wg-kill-workgroup "kill")
+    ("n" wg-rename-workgroup "name")
+    ("r" wg-reload-session "reload")
+    ("ss" wg-save-session "save default")
+    ("w" wg-switch-to-workgroup "workgroup")
   )
 #+END_SRC
 * IBuffer
@@ -668,6 +675,54 @@ USE COMPANY-JEDI INSTEAD
       :config
       (which-key-mode))
   #+END_SRC
+
+* Workgroups2
+Save window and buffer layouts.
+#+BEGIN_SRC emacs-lisp
+  (use-package workgroups2
+    :ensure t
+    :init
+    (setq wg-session-load-on-start nil)
+    (setq wg-emacs-exit-save-behaviour nil)
+    (setq wg-workgroups-mode-exit-save-behavior nil)
+    (setq wg-mode-line-display-on nil)  ;; set to t to show workgroup info in mode line
+    (workgroups-mode 1)
+  )
+#+END_SRC
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
