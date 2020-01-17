@@ -18,13 +18,13 @@
    #+BEGIN_SRC emacs-lisp
      (setq vc-follow-symlinks t)   
    #+END_SRC
-
 ** GUI
    #+BEGIN_SRC emacs-lisp
      (scroll-bar-mode -1)
      (menu-bar-mode -1)
      (tool-bar-mode -1)
    #+END_SRC
+
 ** Mode line
    #+BEGIN_SRC emacs-lisp
     ;; Display both line and column numbers in mode line
@@ -36,12 +36,15 @@
    #+BEGIN_SRC emacs-lisp
     (fset 'yes-or-no-p 'y-or-n-p)
     ;; Adds new lines  when moving cursor past the end of the file
-    (setq next-line-add-newlines t)
+    ;; (setq next-line-add-newlines t)
     (setq inhibit-startup-message t)
     ;; Saves the current desktop (stuff that is loaded, window layout etc.)
     ;;   (desktop-save-mode 1)
     ;; don't jump when scrolling past bottom of screen
     (setq scroll-step 1)
+    (setq scroll-conservatively 101)
+    ;; number of lines from the top/bottom before emacs starts scrolling
+    (setq scroll-margin 0)
    #+END_SRC
 
 ** Tabs
@@ -66,9 +69,10 @@
 #+END_SRC
 * Fonts
 #+BEGIN_SRC emacs-lisp
-  (set-default-font "mono 13" nil t)
-  (if (string= system-name "yoga")
-      (set-default-font "mono 14" nil t))
+    ;; (set-default-font "mono 13" nil t)
+    ;; (if (string= system-name "yoga")
+    ;;     (set-default-font "mono 14" nil t))
+
 #+END_SRC
 * Ace Window
   #+BEGIN_SRC emacs-lisp
@@ -265,7 +269,7 @@ Syntax checking
     :ensure t
     :config
     (key-chord-mode 1)
-    (setq key-chord-two-keys-delay 0.04))
+    (setq key-chord-two-keys-delay 0.06))
 
   (use-package hydra :ensure t)
 
@@ -284,15 +288,16 @@ Syntax checking
   ;; my hydra tree
   (key-chord-define-global "kl" 'hydra-top/body)
 
-
   (defhydra hydra-top (:color blue)
     "Top"
     ("b" hydra-buf/body "buf")
     ("c" comment-or-uncomment-region-or-line "comment")
     ("f" hydra-file/body "file")
     ("h" help "help")
+    ("i" hydra-insert/body "insert")
     ("j" dumb-jump-go "jump")
     ("l" hydra-layout/body "layout")
+    ("m" menu-bar-mode "menu")
     ("p" hydra-proj/body "proj")
     ("q" query-replace "q-replace")
     ("r" redraw-display "redraw")
@@ -312,7 +317,7 @@ Syntax checking
       ('python-mode (hydra-python/body))
       ('rust-mode (hydra-rust/body))
   ))
-      
+
   (defun comment-or-uncomment-region-or-line ()
     "Comments or uncomments the region or the current line if there's no active region."
     (interactive)
@@ -323,7 +328,12 @@ Syntax checking
         (comment-or-uncomment-region beg end)
         (next-logical-line)))
 
-  (defhydra hydra-file (:color blue)
+   (defhydra hydra-insert (:color blue)
+    "Insert"
+    ("u" insert-char "unicode hex")
+   )
+
+   (defhydra hydra-file (:color blue)
     "File"
     ("f" find-file "find")
     ("s" save-buffer "save")
@@ -408,14 +418,14 @@ Syntax checking
     ("d" anaconda-mode-find-definitions "defs")
     ("r" anaconda-mode-find-references "refs")
   )
-  
+
   (defhydra hydra-rust (:color blue)
     ("j" racer-find-definition "jump")
     ("J" racer-find-definition-other-window "jump win")
     ("b" pop-tag-mark "back")
     ("d" racer-describe "describe")
   )
-  
+
   (defhydra hydra-layout (:color blue)
     ("c" wg-create-workgroup "create")
     ("k" wg-kill-workgroup "kill")
@@ -689,6 +699,10 @@ Save window and buffer layouts.
     (workgroups-mode 1)
   )
 #+END_SRC
+
+
+
+
 
 
 
