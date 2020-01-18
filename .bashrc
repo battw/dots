@@ -26,7 +26,7 @@ PURPLE="\[$(tput setaf 5)\]"
 AQUA="\[$(tput setaf 6)\]"
 
 
-PS1="${YELLOW}---->${RESET}  "
+PS1="${YELLOW}-->${RESET} "
 
 
 if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
