@@ -354,8 +354,20 @@ Syntax checking
   (key-chord-define-global "ds" 'swiper)
 
   ;; evil mode
-  (key-chord-define-global "jk" 'evil-normal-state)
+  (key-chord-define-global "jk" 'evil-cond-normal-state)
 
+  ;; to prevent switching into evil-normal-state add the modes name to evil-exclusion-list
+  (setq evil-exclusion-list 
+    '(term-mode magit-status-mode)
+  )
+
+  (defun evil-cond-normal-state ()
+    "switch to evil normal state unless in certain modes"
+    (interactive)
+    (if (not (member major-mode evil-exclusion-list)) 
+      (evil-normal-state)
+  )))
+  
   ;; my hydra tree
   (key-chord-define-global "kl" 'hydra-top/body)
 
