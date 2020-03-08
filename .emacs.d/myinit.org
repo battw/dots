@@ -105,7 +105,7 @@
     "<$" "<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<="
     "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<" "<~"
     "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%"
-    "x" ":" "+" "+" "*"))
+    "[0-9]\\(x\\)[0-9a-fA-F]" ":" "+" "+" "*"))
 
 (defvar fira-code-mode--old-prettify-alist)
 
@@ -358,16 +358,16 @@ Syntax checking
 
   ;; to prevent switching into evil-normal-state add the modes name to evil-exclusion-list
   (setq evil-exclusion-list 
-    '(term-mode magit-status-mode)
+    '(term-mode magit-status-mode racket-repl-mode)
   )
 
   (defun evil-cond-normal-state ()
-    "switch to evil normal state unless in certain modes"
+    "Switch to evil normal state unless in certain modes."
     (interactive)
     (if (not (member major-mode evil-exclusion-list)) 
       (evil-normal-state)
-  )))
-  
+  ))
+
   ;; my hydra tree
   (key-chord-define-global "kl" 'hydra-top/body)
 
