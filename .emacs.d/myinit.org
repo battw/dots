@@ -385,7 +385,7 @@ Syntax checking
     ("p" hydra-proj/body "proj")
     ("q" query-replace "q-replace")
     ("r" redraw-display "redraw")
-    ("t" hydra-shell/body "term")
+    ("t" (ansi-term "/bin/bash") "ansi")
     ("u" undo-tree-visualize "undo vis")
     ("w" hydra-win/body "win")
     ("x" execute-extended-command "x")
