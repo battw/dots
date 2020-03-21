@@ -707,13 +707,17 @@ USE COMPANY-JEDI INSTEAD
     #+BEGIN_SRC emacs-lisp
       (use-package racket-mode
         :ensure t
+        :hook
+        (racket-mode . (lambda () (add-to-list 'prettify-symbols-alist '("lambda" . 955))))
         :init
         (add-to-list 'auto-mode-alist '("\\.rkt\\'" . racket-mode))
         :config
         (setq tab-always-indent 'complete))
         (defhydra hydra-racket (:color blue)
+          ("d" racket-describe "describe")
+          ("e" racket-eval-last-sexp "eval")
           ("r" racket-run "run")
-          ("c" comment-or-uncomment-region "com")
+          ("s" racket-send-last-sexp "send")
           ("RET" nil))
     #+END_SRC
     
