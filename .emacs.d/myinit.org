@@ -746,6 +746,8 @@ USE COMPANY-JEDI INSTEAD
            ("C-e" . end-of-line)
            ("C-p" . comint-previous-input)
            ("C-n" . comint-next-input)
+           ("C-k" . kill-sentence)
+           ("C-u" . backward-kill-sentence)
            )
         :init
         (add-to-list 'auto-mode-alist '("\\.rkt\\'" . racket-mode))
