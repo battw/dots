@@ -148,6 +148,7 @@
 * Ace Window
   #+BEGIN_SRC emacs-lisp
     (use-package ace-window
+      :defer t
       :ensure t
       :init
       (global-set-key [remap other-window] 'ace-window)
@@ -161,11 +162,13 @@ Python ide-ness
 Has an accompanying company mode which I'm using
 #+BEGIN_SRC emacs-lisp
 (use-package anaconda-mode
+  :defer t
   :ensure t
   :hook python-mode
 )
 
 (use-package anaconda-eldoc-mode
+  :defer t
   :hook python-mode
 )
   
@@ -175,6 +178,7 @@ Has an accompanying company mode which I'm using
   #+BEGIN_SRC emacs-lisp
     ;; Make packages update themselves
     (use-package auto-package-update
+      :defer t
       :ensure t
       :config
       (setq auto-package-update-delete-old-versions t)
@@ -186,6 +190,7 @@ Has an accompanying company mode which I'm using
   #+BEGIN_SRC emacs-lisp
     ;; Quick jump to character
     (use-package avy
+      :defer t
       :disabled
       :ensure t
       :bind ("M-s" . avy-goto-word-1))
@@ -204,26 +209,30 @@ Has an accompanying company mode which I'm using
             ("M-p" . nil)
             ("C-n" . company-select-next)
             ("C-p" . company-select-previous))
+      :init
+        (setq company-backends '())
       :config
-      (global-company-mode t)
-      ;; (setq company-tooltip-limit 40)                        ;; completion list length
-      (setq company-idle-delay .3)                           ;; delay before popup shows
-      (setq company-echo-delay 0)                            ;; remove annoying blinking
-      (setq company-begin-commands '(self-insert-command)))  ;; start autocompletion only after typing
+        (global-company-mode t)
+        ;; (setq company-tooltip-limit 40)                        ;; completion list length
+        (setq company-idle-delay .3)                           ;; delay before popup shows
+        (setq company-echo-delay 0)                            ;; remove annoying blinking
+        (setq company-begin-commands '(self-insert-command))  ;; start autocompletion only after typing
+        )
   #+END_SRC
 
 ** Company Go
    #+BEGIN_SRC emacs-lisp
      (use-package company-go
+       :defer t
      :ensure t
-     :init
-;;     (add-to-list 'company-backends 'company-go) ;; Why doesn't this work?
-    
-       (add-hook 'go-mode-hook
-         (lambda ()
-           (set (make-local-variable 'company-backends) '(company-go))
-           (company-mode)))
+     :config
+     (add-to-list 'company-backends 'company-go) 
      )
+     ;;   (add-hook 'go-mode-hook
+     ;;     (lambda ()
+     ;;       (set (make-local-variable 'company-backends) '(company-go))
+     ;;       (company-mode)))
+     ;; )
    #+END_SRC
 
 ** Company Elisp
@@ -243,6 +252,7 @@ Has an accompanying company mode which I'm using
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
   (use-package company-anaconda
+    :defer t
     :ensure t
      :init
        (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-anaconda)))
@@ -253,6 +263,7 @@ Has an accompanying company mode which I'm using
 [[https://github.com/racer-rust/emacs-racer][installation instructions]]
 #+BEGIN_SRC emacs-lisp
 (use-package racer
+  :defer t
 :ensure t
 :init
   ;; hooks are added here rather than after ":hook" as the required name is "racer-mode"
@@ -267,6 +278,7 @@ Has an accompanying company mode which I'm using
 * Dumb Jump
     #+BEGIN_SRC emacs-lisp
       (use-package dumb-jump
+        :defer t
         :ensure t
         :bind (("M-g o" . dumb-jump-go-other-window)
                ("M-g j" . dumb-jump-go)
@@ -310,6 +322,7 @@ Has an accompanying company mode which I'm using
 Syntax checking
 #+BEGIN_SRC emacs-lisp
 (use-package flycheck
+  :defer t
   :ensure t
   :init 
       (global-flycheck-mode)
@@ -319,11 +332,13 @@ Syntax checking
 ** Emacs and scheme talk to each other
 #+BEGIN_SRC emacs-lisp
   (use-package geiser
+    :defer t
     :ensure t)
 #+END_SRC
 * Go Mode
   #+BEGIN_SRC emacs-lisp
     (use-package go-mode
+      :defer t
       :ensure t
       :config
       (add-hook 'before-save-hook 'gofmt-before-save))
@@ -331,7 +346,9 @@ Syntax checking
 
 * Htmlize
 #+BEGIN_SRC emacs-lisp
-  (use-package htmlize :ensure t)
+  (use-package htmlize 
+    :defer t
+    :ensure t)
 #+END_SRC
 
 * Hydra + Key Chords + My Bindings
@@ -342,7 +359,9 @@ Syntax checking
     (key-chord-mode 1)
     (setq key-chord-two-keys-delay 0.05))
 
-  (use-package hydra :ensure t)
+  (use-package hydra 
+    :defer t
+    :ensure t)
 
   ;; C-g 
   (key-chord-define-global "fr" 'keyboard-escape-quit)
@@ -535,6 +554,7 @@ Syntax checking
 ** Ivy
   #+BEGIN_SRC emacs-lisp
   (use-package ivy
+    :defer t
     :ensure t
     :config
     (ivy-mode 1)
@@ -547,6 +567,7 @@ Syntax checking
 ** Counsel
   #+BEGIN_SRC emacs-lisp
     (use-package counsel
+      :defer t
       :ensure t
       :config
       (counsel-mode)
@@ -556,6 +577,7 @@ Syntax checking
 ** Swiper
   #+BEGIN_SRC emacs-lisp
     (use-package swiper
+      :defer t
       :ensure t
     )
   #+END_SRC
@@ -571,6 +593,7 @@ Syntax checking
 
 #+BEGIN_SRC emacs-lisp
   (use-package js2-mode
+    :defer t
     :ensure t
     :init
     (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
@@ -578,6 +601,7 @@ Syntax checking
     (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
 
   (use-package js2-refactor
+    :defer t
     :ensure t
     :init
     (add-hook 'js2-mode-hook #'js2-refactor-mode))
@@ -591,8 +615,8 @@ Syntax checking
   ;;             (lambda ()
   ;;               (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
 
-  (use-package 
-    company-tern
+  (use-package company-tern
+    :defer t
     :ensure t
     :init
     (add-to-list 'company-backends 'company-tern)
@@ -612,6 +636,7 @@ USE COMPANY-JEDI INSTEAD
 * Magit
 #+BEGIN_SRC emacs-lisp
   (use-package magit 
+    :defer t
     :ensure t
   )
 #+END_SRC
@@ -645,6 +670,7 @@ USE COMPANY-JEDI INSTEAD
 ** Org Bullets
    #+BEGIN_SRC emacs-lisp
      (use-package org-bullets
+       :defer t
        :ensure t
        :config
        (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
@@ -654,6 +680,7 @@ USE COMPANY-JEDI INSTEAD
 #+BEGIN_SRC emacs-lisp
  
   (use-package org
+    :defer t
     :ensure t
     ;; :bind
     ;; (:map org-mode-map
@@ -688,6 +715,7 @@ USE COMPANY-JEDI INSTEAD
 * PDF Tools
   #+BEGIN_SRC emacs-lisp
     (use-package pdf-tools
+      :defer t
       :ensure t
       :config
       (pdf-tools-install))
@@ -697,6 +725,7 @@ USE COMPANY-JEDI INSTEAD
     #+BEGIN_SRC emacs-lisp
       ;; projectile
       (use-package projectile
+        :defer t
         :ensure t
         :bind ("C-c p" . projectile-command-map)
         :config
@@ -708,6 +737,7 @@ USE COMPANY-JEDI INSTEAD
 - [[https://www.racket-mode.com/][racket mode manual]]
     #+BEGIN_SRC emacs-lisp
       (use-package racket-mode
+        :defer t
         :ensure t
         :hook
         (racket-mode . (lambda () (add-to-list 'prettify-symbols-alist '("lambda" . 955))))
@@ -734,6 +764,7 @@ USE COMPANY-JEDI INSTEAD
 * Rust Mode
 #+BEGIN_SRC emacs-lisp
   (use-package rust-mode
+    :defer t
     :ensure t
     :config 
       (setq rust-format-on-save t)
@@ -741,6 +772,7 @@ USE COMPANY-JEDI INSTEAD
 
   ;; provides compatablity between flycheck and cargo projects
   (use-package flycheck-rust
+    :defer t
   :ensure t
   :config 
     (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
@@ -750,6 +782,7 @@ USE COMPANY-JEDI INSTEAD
 * Themes
 #+BEGIN_SRC emacs-lisp
     (use-package gruvbox-theme 
+      :defer t
       :ensure t
       :init
       (message "TOOOOO")
@@ -758,12 +791,15 @@ USE COMPANY-JEDI INSTEAD
 
 * Try
   #+BEGIN_SRC emacs-lisp
-    (use-package try :ensure t)
+    (use-package try 
+      :defer t
+      :ensure t)
   #+END_SRC
 
 * Visual line mode
   #+BEGIN_SRC emacs-lisp
   (use-package visual-line-mode
+    :defer t
       :hook org-mode)
   #+END_SRC
 * Which Key
@@ -778,6 +814,7 @@ USE COMPANY-JEDI INSTEAD
 Save window and buffer layouts.
 #+BEGIN_SRC emacs-lisp
   (use-package workgroups2
+    :defer t
     :ensure t
     :init
     (setq wg-session-load-on-start nil)
