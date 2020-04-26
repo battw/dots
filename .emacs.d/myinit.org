@@ -139,11 +139,11 @@
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-;; Make the mode always on and everywhere
-(define-globalized-minor-mode global-fira-code-mode fira-code-mode
-  (lambda () (fira-code-mode 1)))
+  ;; Make the mode always on and everywhere
+  (define-globalized-minor-mode global-fira-code-mode fira-code-mode
+    (lambda () (fira-code-mode 1)))
 
-(global-fira-code-mode 1)
+  ;; (global-fira-code-mode 1)
 #+END_SRC
 * Ace Window
   #+BEGIN_SRC emacs-lisp
@@ -357,8 +357,7 @@ Syntax checking
     :ensure t
     :config
     (key-chord-mode 1)
-    (setq key-chord-two-keys-delay 0.05))
-
+    (setq key-chord-two-keys-delay 0.07))
   (use-package hydra 
     :defer t
     :ensure t)
@@ -377,7 +376,8 @@ Syntax checking
 
   ;; to prevent switching into evil-normal-state add the modes name to evil-exclusion-list
   (setq evil-exclusion-list 
-    '(term-mode magit-status-mode racket-repl-mode)
+  ;;   '(term-mode magit-status-mode racket-repl-mode)
+  '()
   )
 
   (defun evil-cond-normal-state ()
