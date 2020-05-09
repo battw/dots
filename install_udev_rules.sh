@@ -3,4 +3,5 @@ for f in ./*.rules
 do
     sudo cp $f /etc/udev/rules.d/
 done
+sudo udevadm control --reload-rules
 
