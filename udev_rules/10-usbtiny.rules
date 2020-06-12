@@ -1,0 +1,1 @@
+SUBSYSTEM=="usb", ATTR{product}=="USBtiny", ATTR{idProduct}=="0c9f", ATTRS{idVendor}=="1781", SYMLINK+="usbtiny%n", MODE="0660", GROUP="programmers"

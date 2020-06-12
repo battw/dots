@@ -328,6 +328,18 @@ Syntax checking
       (global-flycheck-mode)
 )
 #+END_SRC
+* GDB
+#+BEGIN_SRC emacs-lisp 
+  ;; (use-package gdb
+  ;;   ;; :bind
+  ;;   ;;   (("C-e" . end-of-line)
+  ;;   ;;      ("C-p" . comint-previous-input)
+  ;;   ;;      ("C-n" . comint-next-input)
+  ;;   ;;      ("C-k" . kill-sentence)
+  ;;   ;;      ("C-u" . backward-kill-sentence)
+  ;;   ;;      )
+  ;; )
+#+END_SRC
 * Geiser
 ** Emacs and scheme talk to each other
 #+BEGIN_SRC emacs-lisp
@@ -556,8 +568,9 @@ Syntax checking
   (use-package ivy
     :defer t
     :ensure t
-    :config
+    :init 
     (ivy-mode 1)
+    :config
     (setq ivy-use-virtual-buffers t)
     (setq ivy-count-format "%d/%d ")
     (setq ivy-display-style 'fancy)
@@ -569,8 +582,8 @@ Syntax checking
     (use-package counsel
       :defer t
       :ensure t
-      :config
-      (counsel-mode)
+      :init
+      (counsel-mode t)
     )
   #+END_SRC
   
