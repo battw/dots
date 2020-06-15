@@ -1,5 +1,14 @@
 #+STARTUP: overview 
 #+PROPERTY: header-args :comments yes :results silent
+* TODO
+- C, C++, Rust, Go, Racket, Python, Javascript, GDScript(?), GDB.
+- Sort LSP wherever it is appropriate.
+- Decent goto definition
+- Goto docs.
+- A better function to prevent a buffer, of a given major mode, switching to evil normal mode.
+- Check out Helm.
+- Get Dired to stay in a single buffer
+- Tidy up mode line
 * A Basic Settings
 ** Symlink Hack
    By default emacs will query the user asking whether it should follow the sym link to 
@@ -157,23 +166,6 @@
          ((t (:inherit ace-jump-face-foreground :height 3.0))))))
   #+END_SRC
 
-* Anaconda
-Python ide-ness
-Has an accompanying company mode which I'm using
-#+BEGIN_SRC emacs-lisp
-(use-package anaconda-mode
-  :defer t
-  :ensure t
-  :hook python-mode
-)
-
-(use-package anaconda-eldoc-mode
-  :defer t
-  :hook python-mode
-)
-  
-
-#+END_SRC
 * Auto Package Update
   #+BEGIN_SRC emacs-lisp
     ;; Make packages update themselves
@@ -189,12 +181,12 @@ Has an accompanying company mode which I'm using
 * Avy
   #+BEGIN_SRC emacs-lisp
     ;; Quick jump to character
-    (use-package avy
-      :defer t
-      :disabled
-      :ensure t
-      :bind ("M-s" . avy-goto-word-1))
-  #+END_SRC#+END_SRC
+    ;; (use-package avy
+    ;;   :defer t
+    ;;   :disabled
+    ;;   :ensure t
+    ;;   :bind ("M-s" . avy-goto-word-1))
+  #+END_SRC
 
 * Company
   http://company-mode.github.io/
@@ -210,26 +202,28 @@ Has an accompanying company mode which I'm using
             ("C-n" . company-select-next)
             ("C-p" . company-select-previous))
       :init
-        (setq company-backends '())
-      :config
+;;        (setq company-backends '())
         (global-company-mode t)
+      :config
         ;; (setq company-tooltip-limit 40)                        ;; completion list length
         (setq company-idle-delay .3)                           ;; delay before popup shows
         (setq company-echo-delay 0)                            ;; remove annoying blinking
         (setq company-begin-commands '(self-insert-command))  ;; start autocompletion only after typing
+        (setq company-minimum-prefix-length 1)
         )
   #+END_SRC
 
 ** Company Go
    #+BEGIN_SRC emacs-lisp
-     (use-package company-go
-       :defer t
-     :ensure t
-     :config
-     (add-to-list 'company-backends 'company-go) 
-     )
-     ;;   (add-hook 'go-mode-hook
-     ;;     (lambda ()
+     ;; (use-package company-go
+     ;;   :defer t
+     ;; :ensure t
+     ;; :config
+     ;; (add-to-list 'company-backends 'company-go) 
+     ;; )
+     ;; ;;   (add-hook 'go-mode-hook
+     ;; ;
+                                             ;     (lambda ()
      ;;       (set (make-local-variable 'company-backends) '(company-go))
      ;;       (company-mode)))
      ;; )
@@ -240,40 +234,21 @@ Has an accompanying company mode which I'm using
    
    #+END_SRC
 
-** Company Jedi
-#+BEGIN_SRC emacs-lisp
-;;   (use-package company-jedi
-;;     :ensure t
-;;     :init
-;;       (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi)))
-;;       
-;;   )
-
-#+END_SRC
-#+BEGIN_SRC emacs-lisp
-  (use-package company-anaconda
-    :defer t
-    :ensure t
-     :init
-       (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-anaconda)))
-  )
-#+END_SRC
-
 ** Rust Racer
 [[https://github.com/racer-rust/emacs-racer][installation instructions]]
 #+BEGIN_SRC emacs-lisp
-(use-package racer
-  :defer t
-:ensure t
-:init
-  ;; hooks are added here rather than after ":hook" as the required name is "racer-mode"
-  ;; rather than "racer" 
-  (add-hook 'rust-mode-hook #'racer-mode)
-  (add-hook 'racer-mode-hook #'eldoc-mode)
-  (add-hook 'racer-mode-hook #'company-mode)
-:config
-  (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
-)
+  ;; (use-package racer
+  ;;   :defer t
+  ;; :ensure t
+  ;; :init
+  ;;   ;; hooks are added here rather than after ":hook" as the required name is "racer-mode"
+  ;;   ;; rather than "racer" 
+  ;;   (add-hook 'rust-mode-hook #'racer-mode)
+  ;;   (add-hook 'racer-mode-hook #'eldoc-mode)
+  ;;   (add-hook 'racer-mode-hook #'company-mode)
+  ;; :config
+  ;;   (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+  ;; )
 #+END_SRC
 * Dumb Jump
     #+BEGIN_SRC emacs-lisp
@@ -329,6 +304,7 @@ Syntax checking
 )
 #+END_SRC
 * GDB
+Find the correct functions for the shorcuts below
 #+BEGIN_SRC emacs-lisp 
   ;; (use-package gdb
   ;;   ;; :bind
@@ -340,7 +316,8 @@ Syntax checking
   ;;   ;;      )
   ;; )
 #+END_SRC
-* Geiser
+* Geiser (Scheme stuff)
+[[http://www.nongnu.org/geiser/][website]]
 ** Emacs and scheme talk to each other
 #+BEGIN_SRC emacs-lisp
   (use-package geiser
@@ -556,6 +533,7 @@ Syntax checking
     ;; (setq ibuffer-default-sorting-mode 'major-mode)
   #+END_SRC
 * Ido
+Completion in minibuffer. I'm using Ivy instead.
   #+BEGIN_SRC emacs-lisp
     ;; (setq ido-enable-flex-matching t)
     ;; (setq ido-everywhere t)
@@ -642,10 +620,41 @@ Syntax checking
     ;;(define-key tern-mode-keymap (kbd "M-,") nil)
     )
 #+END_SRC
-* Jedi
-WARNING! 
-DON'T USE JEDI.EL WITH COMPANY.
-USE COMPANY-JEDI INSTEAD
+* LSP Mode
+ [[https://emacs-lsp.github.io/lsp-mode/][website]]
+ #+BEGIN_SRC emacs-lisp
+   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+   (setq lsp-keymap-prefix "C-c l")
+
+   (use-package lsp-mode
+       :ensure t
+       :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+              (python-mode . lsp)
+               ;; if you want which-key integration
+               (lsp-mode . lsp-enable-which-key-integration))
+       :commands lsp
+       :config
+       ;; company backend for completion-at-point. company-lsp is listed as being no 
+       ;; longer supported on the lsp-mode website but might be an alternative.
+       (add-to-list 'company-backends 'company-capf))
+   ;; optionally
+   (use-package lsp-ui :commands lsp-ui-mode)
+   ;; if you are helm user
+   ;;(use-package helm-lsp :commands helm-lsp-workspace-symbol)
+   ;; if you are ivy user
+   (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+   (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+
+   ;; optionally if you want to use debugger
+   ;; (use-package dap-mode)
+   ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+
+   ;; optional if you want which-key integration
+   (use-package which-key
+       :config
+       (which-key-mode))
+ #+END_SRC
+
 * Magit
 #+BEGIN_SRC emacs-lisp
   (use-package magit 
@@ -746,6 +755,45 @@ USE COMPANY-JEDI INSTEAD
         (setq projectile-completion-system 'ivy))
     #+END_SRC
 
+* Python
+** Anaconda
+Python ide-ness
+Has an accompanying company mode which I'm using
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package anaconda-mode
+  ;;   :defer t
+  ;;   :ensure t
+  ;;   :hook python-mode
+  ;; )
+
+  ;; (use-package anaconda-eldoc-mode
+  ;;   :defer t
+  ;;   :hook python-mode
+  ;; )
+  
+
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package company-anaconda
+  ;;   :defer t
+  ;;   :ensure t
+  ;;    :init
+  ;;      (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-anaconda)))
+  ;; )
+#+END_SRC
+** Jedi
+WARNING! 
+DON'T USE JEDI.EL WITH COMPANY.
+USE COMPANY-JEDI INSTEAD
+#+BEGIN_SRC emacs-lisp
+;;   (use-package company-jedi
+;;     :ensure t
+;;     :init
+;;       (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi)))
+;;       
+;;   )
+
+#+END_SRC
 * Racket Mode
 - [[https://www.racket-mode.com/][racket mode manual]]
     #+BEGIN_SRC emacs-lisp
@@ -801,7 +849,6 @@ USE COMPANY-JEDI INSTEAD
       :defer t
       :ensure t
       :init
-      (message "TOOOOO")
       (load-theme 'gruvbox-dark-hard t))
 #+END_SRC
 
