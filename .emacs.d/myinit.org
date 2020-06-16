@@ -1,6 +1,8 @@
 #+STARTUP: overview 
 #+PROPERTY: header-args :comments yes :results silent
 * TODO
+- check error reporting for python
+- python hydra is expecting anaconda
 - C, C++, Rust, Go, Racket, Python, Javascript, GDScript(?), GDB.
 - Sort LSP wherever it is appropriate.
 - Decent goto definition
@@ -75,6 +77,10 @@
 #+BEGIN_SRC emacs-lisp
   (toggle-frame-maximized)
   ;; (toggle-frame-fullscreen)
+#+END_SRC
+* Clear Company Backends List
+#+BEGIN_SRC emacs-lisp
+(setq company-backends '())
 #+END_SRC
 * Fonts
 #+BEGIN_SRC emacs-lisp
@@ -188,6 +194,33 @@
     ;;   :bind ("M-s" . avy-goto-word-1))
   #+END_SRC
 
+* C/C++
+** lsp (currently disabled as its throwing loads of errors)
+#+BEGIN_SRC emacs-lisp
+  ;; (add-hook 'c-mode-hook 'lsp)
+  ;; (add-hook 'c++-mode-hook 'lsp)
+#+END_SRC
+** Irony
+Need to install clang and llvm.
+#+BEGIN_SRC emacs-lisp
+ (use-package company-irony
+ :ensure t
+ :config 
+ (add-to-list 'company-backends 'company-irony))
+
+ (use-package irony
+ :ensure t
+ :config
+ (add-hook 'c++-mode-hook 'irony-mode)
+ (add-hook 'c-mode-hook 'irony-mode)
+ (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+
+ (use-package irony-eldoc
+ :ensure t
+ :config
+ (add-hook 'irony-mode-hook #'irony-eldoc))
+
+#+END_SRC
 * Company
   http://company-mode.github.io/
 
@@ -202,7 +235,11 @@
             ("C-n" . company-select-next)
             ("C-p" . company-select-previous))
       :init
-;;        (setq company-backends '())
+       ;; Remove default backends and use the completion at point one.
+       ;; This should prevent any weird interactions with lsp-mode
+       ;; company-lsp is listed, on the lsp-mode website, as no longer being supported  
+       ;; but might be an alternative backend.
+        (add-to-list 'company-backends 'company-capf) 
         (global-company-mode t)
       :config
         ;; (setq company-tooltip-limit 40)                        ;; completion list length
@@ -388,7 +425,7 @@ Find the correct functions for the shorcuts below
     ("h" help "help")
     ("i" hydra-insert/body "insert")
     ("j" dumb-jump-go "jump")
-    ("l" hydra-layout/body "layout")
+    ;; ("l" hydra-layout/body "layout")
     ("m" menu-bar-mode "menu")
     ("p" hydra-proj/body "proj")
     ("q" query-replace "q-replace")
@@ -518,14 +555,6 @@ Find the correct functions for the shorcuts below
     ("d" racer-describe "describe")
   )
 
-  (defhydra hydra-layout (:color blue)
-    ("c" wg-create-workgroup "create")
-    ("k" wg-kill-workgroup "kill")
-    ("n" wg-rename-workgroup "name")
-    ("r" wg-reload-session "reload")
-    ("ss" wg-save-session "save default")
-    ("w" wg-switch-to-workgroup "workgroup")
-  )
 #+END_SRC
 * IBuffer
   #+BEGIN_SRC emacs-lisp
@@ -583,42 +612,42 @@ Completion in minibuffer. I'm using Ivy instead.
 - [[http://ternjs.net/doc/manual.html#configuration][.tern-config docs]]
 
 #+BEGIN_SRC emacs-lisp
-  (use-package js2-mode
-    :defer t
-    :ensure t
-    :init
-    (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-    (add-to-list 'auto-mode-alist '("\\.mjs$" . js2-mode))
-    (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
-
-  (use-package js2-refactor
-    :defer t
-    :ensure t
-    :init
-    (add-hook 'js2-mode-hook #'js2-refactor-mode))
-
-  ;; requires the_silver_searcher on your os 
-  ;; (use-package xref-js2
+  ;; (use-package js2-mode
+  ;;   :defer t
   ;;   :ensure t
   ;;   :init
-  ;;   (define-key js-mode-map (kbd "M-.") nil)
-  ;;   (add-hook 'js2-mode-hook
-  ;;             (lambda ()
-  ;;               (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
+  ;;   (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+  ;;   (add-to-list 'auto-mode-alist '("\\.mjs$" . js2-mode))
+  ;;   (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
 
-  (use-package company-tern
-    :defer t
-    :ensure t
-    :init
-    (add-to-list 'company-backends 'company-tern)
-    (add-hook 'js2-mode-hook (lambda ()
-                             (tern-mode)
-                             (company-mode)))
-    ;;:config
-    ;; keybindings are also used by xref-js2 so...
-    ;;(define-key tern-mode-keymap (kbd "M-.") nil)
-    ;;(define-key tern-mode-keymap (kbd "M-,") nil)
-    )
+  ;; (use-package js2-refactor
+  ;;   :defer t
+  ;;   :ensure t
+  ;;   :init
+  ;;   (add-hook 'js2-mode-hook #'js2-refactor-mode))
+
+  ;; ;; requires the_silver_searcher on your os 
+  ;; ;; (use-package xref-js2
+  ;; ;;   :ensure t
+  ;; ;;   :init
+  ;; ;;   (define-key js-mode-map (kbd "M-.") nil)
+  ;; ;;   (add-hook 'js2-mode-hook
+  ;; ;;             (lambda ()
+  ;; ;;               (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
+
+  ;; (use-package company-tern
+  ;;   :defer t
+  ;;   :ensure t
+  ;;   :init
+  ;;   (add-to-list 'company-backends 'company-tern)
+  ;;   (add-hook 'js2-mode-hook (lambda ()
+  ;;                            (tern-mode)
+  ;;                            (company-mode)))
+  ;;   ;;:config
+  ;;   ;; keybindings are also used by xref-js2 so...
+  ;;   ;;(define-key tern-mode-keymap (kbd "M-.") nil)
+  ;;   ;;(define-key tern-mode-keymap (kbd "M-,") nil)
+  ;;   )
 #+END_SRC
 * LSP Mode
  [[https://emacs-lsp.github.io/lsp-mode/][website]]
@@ -628,31 +657,23 @@ Completion in minibuffer. I'm using Ivy instead.
 
    (use-package lsp-mode
        :ensure t
-       :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-              (python-mode . lsp)
-               ;; if you want which-key integration
+       :hook (;; if you want which-key integration
                (lsp-mode . lsp-enable-which-key-integration))
-       :commands lsp
-       :config
-       ;; company backend for completion-at-point. company-lsp is listed as being no 
-       ;; longer supported on the lsp-mode website but might be an alternative.
-       (add-to-list 'company-backends 'company-capf))
+       :commands lsp)
+
    ;; optionally
-   (use-package lsp-ui :commands lsp-ui-mode)
+   (use-package lsp-ui :ensure t :commands lsp-ui-mode)
    ;; if you are helm user
    ;;(use-package helm-lsp :commands helm-lsp-workspace-symbol)
    ;; if you are ivy user
-   (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-   (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+   (use-package lsp-ivy :ensure t :commands lsp-ivy-workspace-symbol)
+   (use-package lsp-treemacs :ensure :commands lsp-treemacs-errors-list)
 
-   ;; optionally if you want to use debugger
+   ;; ;; optionally if you want to use debugger
+   ;; ;; 
    ;; (use-package dap-mode)
    ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
-   ;; optional if you want which-key integration
-   (use-package which-key
-       :config
-       (which-key-mode))
  #+END_SRC
 
 * Magit
@@ -756,44 +777,11 @@ Completion in minibuffer. I'm using Ivy instead.
     #+END_SRC
 
 * Python
-** Anaconda
-Python ide-ness
-Has an accompanying company mode which I'm using
+Need to install the python language server on the system to get lsp-mode to work.
 #+BEGIN_SRC emacs-lisp
-  ;; (use-package anaconda-mode
-  ;;   :defer t
-  ;;   :ensure t
-  ;;   :hook python-mode
-  ;; )
-
-  ;; (use-package anaconda-eldoc-mode
-  ;;   :defer t
-  ;;   :hook python-mode
-  ;; )
-  
-
+  (add-hook 'python-mode-hook 'lsp)
 #+END_SRC
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package company-anaconda
-  ;;   :defer t
-  ;;   :ensure t
-  ;;    :init
-  ;;      (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-anaconda)))
-  ;; )
-#+END_SRC
-** Jedi
-WARNING! 
-DON'T USE JEDI.EL WITH COMPANY.
-USE COMPANY-JEDI INSTEAD
-#+BEGIN_SRC emacs-lisp
-;;   (use-package company-jedi
-;;     :ensure t
-;;     :init
-;;       (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi)))
-;;       
-;;   )
 
-#+END_SRC
 * Racket Mode
 - [[https://www.racket-mode.com/][racket mode manual]]
     #+BEGIN_SRC emacs-lisp
@@ -826,21 +814,26 @@ USE COMPANY-JEDI INSTEAD
     #+END_SRC
     
 * Rust Mode
+to get lsp to work
+- rustup update
+- rustup component add rls rust-analysis rust-src
 #+BEGIN_SRC emacs-lisp
   (use-package rust-mode
     :defer t
     :ensure t
+    :init
+      (add-hook 'rust-mode-hook 'lsp)
     :config 
       (setq rust-format-on-save t)
   )
 
   ;; provides compatablity between flycheck and cargo projects
-  (use-package flycheck-rust
-    :defer t
-  :ensure t
-  :config 
-    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
-  )
+  ;; (use-package flycheck-rust
+  ;;   :defer t
+  ;; :ensure t
+  ;; :config 
+  ;;   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+  ;; )
 #+END_SRC
   
 * Themes
@@ -876,14 +869,22 @@ USE COMPANY-JEDI INSTEAD
 * Workgroups2
 Save window and buffer layouts.
 #+BEGIN_SRC emacs-lisp
-  (use-package workgroups2
-    :defer t
-    :ensure t
-    :init
-    (setq wg-session-load-on-start nil)
-    (setq wg-emacs-exit-save-behaviour nil)
-    (setq wg-workgroups-mode-exit-save-behavior nil)
-    (setq wg-mode-line-display-on nil)  ;; set to t to show workgroup info in mode line
-    (workgroups-mode 1)
-  )
+  ;; (use-package workgroups2
+  ;;   :defer t
+  ;;   :ensure t
+  ;;   :init
+  ;;   (setq wg-session-load-on-start nil)
+  ;;   (setq wg-emacs-exit-save-behaviour nil)
+  ;;   (setq wg-workgroups-mode-exit-save-behavior nil)
+  ;;   (setq wg-mode-line-display-on nil)  ;; set to t to show workgroup info in mode line
+  ;;   (workgroups-mode 1)
+  ;; )
+  ;; (defhydra hydra-layout (:color blue)
+  ;;   ("c" wg-create-workgroup "create")
+  ;;   ("k" wg-kill-workgroup "kill")
+  ;;   ("n" wg-rename-workgroup "name")
+  ;;   ("r" wg-reload-session "reload")
+  ;;   ("ss" wg-save-session "save default")
+  ;;   ("w" wg-switch-to-workgroup "workgroup")
+  ;; )
 #+END_SRC
