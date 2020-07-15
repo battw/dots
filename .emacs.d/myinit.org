@@ -316,14 +316,16 @@ Need to install clang and llvm.
     :config
     (evil-mode t)
     (evil-set-initial-state 'term-mode 'emacs)
+    (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+    (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
   )
-    
+
   (use-package evil-surround
     :ensure t
     :config
     (global-evil-surround-mode 1)
   )
-  
+
   (use-package evil-snipe
     :ensure t
     :config
