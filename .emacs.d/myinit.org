@@ -223,7 +223,7 @@ Need to install clang and llvm.
 #+END_SRC
 * Company
   http://company-mode.github.io/
-
+** Config
   #+BEGIN_SRC emacs-lisp
     ;; Auto completion
     (use-package company
@@ -249,7 +249,15 @@ Need to install clang and llvm.
         (setq company-minimum-prefix-length 1)
         )
   #+END_SRC
-
+** Company-box
+Display icons in completion list.
+- https://github.com/sebastiencs/company-box
+#+BEGIN_SRC emacs-lisp
+  (use-package company-box
+    :ensure t
+    :init
+    (add-hook 'company-mode-hook 'company-box-mode))
+#+END_SRC
 ** Company Go
    #+BEGIN_SRC emacs-lisp
      ;; (use-package company-go
@@ -427,7 +435,7 @@ Find the correct functions for the shorcuts below
     ("h" help "help")
     ("i" hydra-insert/body "insert")
     ("j" dumb-jump-go "jump")
-    ;; ("l" hydra-layout/body "layout")
+    ("l" hydra-lsp/body "lsp")
     ("m" menu-bar-mode "menu")
     ("p" hydra-proj/body "proj")
     ("q" query-replace "q-replace")
@@ -570,7 +578,7 @@ Completion in minibuffer. I'm using Ivy instead.
     ;; (setq ido-everywhere t)
     ;; (ido-mode 1)
   #+END_SRC
-
+  
 * Ivy / Counsel / Swiper
 ** Ivy
   #+BEGIN_SRC emacs-lisp
@@ -605,71 +613,58 @@ Completion in minibuffer. I'm using Ivy instead.
   #+END_SRC
 
 * Javascript
-- [[https://emacs.cafe/emacs/javascript/setup/2017/04/23/emacs-setup-javascript.html][Setting up Emacs for JavaScript (part 1)]]
-- [[https://emacs.cafe/emacs/javascript/setup/2017/05/09/emacs-setup-javascript-2.html][part 2]] 
-- For xref-js2 you need the_silver_searcher on your os (in arch repo)
-- For company-tern you need to install tern on your os
-- sudo npm install -g tern
-- [[https://atom.io/packages/atom-ternjs][Set up a .tern-config file for each project (example)]]
-- [[http://ternjs.net/doc/manual.html#configuration][.tern-config docs]]
-
 #+BEGIN_SRC emacs-lisp
-  ;; (use-package js2-mode
-  ;;   :defer t
-  ;;   :ensure t
-  ;;   :init
-  ;;   (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-  ;;   (add-to-list 'auto-mode-alist '("\\.mjs$" . js2-mode))
-  ;;   (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
+  (defun js-mode--myinit ()
+  ;; TODO: These variables want to be buffer local to the new js-mode buffer.
+    (setq-local lsp-ui-doc-enable nil)
+    (setq-local lsp-ui-sideline-show-diagnostics t)
+    (setq-local lsp-ui-sideline-show-code-actions nil)
+    (setq-local lsp-ui-sideline-show-hover nil)
+    (setq-local lsp-ui-sideline-show-symbol nil)
+    ;; (setq lsp-ui-sideline-update-mode 'line)
+    ;; (setq lsp-ui-sideline-delay 1)
+    (lsp)
+    )
 
-  ;; (use-package js2-refactor
-  ;;   :defer t
-  ;;   :ensure t
-  ;;   :init
-  ;;   (add-hook 'js2-mode-hook #'js2-refactor-mode))
-
-  ;; ;; requires the_silver_searcher on your os 
-  ;; ;; (use-package xref-js2
-  ;; ;;   :ensure t
-  ;; ;;   :init
-  ;; ;;   (define-key js-mode-map (kbd "M-.") nil)
-  ;; ;;   (add-hook 'js2-mode-hook
-  ;; ;;             (lambda ()
-  ;; ;;               (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
-
-  ;; (use-package company-tern
-  ;;   :defer t
-  ;;   :ensure t
-  ;;   :init
-  ;;   (add-to-list 'company-backends 'company-tern)
-  ;;   (add-hook 'js2-mode-hook (lambda ()
-  ;;                            (tern-mode)
-  ;;                            (company-mode)))
-  ;;   ;;:config
-  ;;   ;; keybindings are also used by xref-js2 so...
-  ;;   ;;(define-key tern-mode-keymap (kbd "M-.") nil)
-  ;;   ;;(define-key tern-mode-keymap (kbd "M-,") nil)
-  ;;   )
+  (add-hook 'js-mode-hook #'js-mode--myinit)
 #+END_SRC
 * LSP Mode
  [[https://emacs-lsp.github.io/lsp-mode/][website]]
  #+BEGIN_SRC emacs-lisp
-   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-   (setq lsp-keymap-prefix "C-c l")
+   ;; set prefix for lsp-commandprefix "C-c l")
 
    (use-package lsp-mode
        :ensure t
        :hook (;; if you want which-key integration
                (lsp-mode . lsp-enable-which-key-integration))
-       :commands lsp)
+       :commands lsp 
+       :config 
+
+       (defhydra hydra-lsp (:color blue)
+         ("i" lsp-ui-imenu "imenu")
+         ("d" lsp-ui-doc-show "doc") 
+         ("pd" lsp-ui-peek-find-definitions "peek defs")
+         ("pr" lsp-ui-peek-find-references "peek refs")
+         ("f" lsp-ui-peek-jump-forward "peek forward")
+         ("b" lsp-ui-peek-jump-backward "peek backward")
+         )
+       )
 
    ;; optionally
-   (use-package lsp-ui :ensure t :commands lsp-ui-mode)
-   ;; if you are helm user
+   (use-package lsp-ui 
+     :ensure t
+     :commands lsp-ui-mode
+     )
+   ;;if you are helm user
    ;;(use-package helm-lsp :commands helm-lsp-workspace-symbol)
    ;; if you are ivy user
-   (use-package lsp-ivy :ensure t :commands lsp-ivy-workspace-symbol)
-   (use-package lsp-treemacs :ensure :commands lsp-treemacs-errors-list)
+   (use-package lsp-ivy 
+     :ensure t 
+     :commands lsp-ivy-workspace-symbol)
+
+   (use-package lsp-treemacs 
+     :ensure t 
+     :commands lsp-treemacs-errors-list)
 
    ;; ;; optionally if you want to use debugger
    ;; ;; 
