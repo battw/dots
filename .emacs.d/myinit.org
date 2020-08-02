@@ -688,6 +688,29 @@ Completion in minibuffer. I'm using Ivy instead.
 #+END_SRC
 * Mode line
 [[https://emacs-fu.blogspot.com/2011/08/customizing-mode-line.html][emacs fu modeline tutorial]]
+[[https://occasionallycogent.com/custom_emacs_modeline/index.html][occasionally cogent modeline post]]
+#+BEGIN_SRC emacs-lisp
+   (setq-default mode-line-format
+                 '("%e"
+                  mode-line-front-space
+                  mode-line-mule-info
+                  mode-line-client
+                  mode-line-modified
+                  mode-line-remote
+                  mode-line-frame-identification
+                  mode-line-buffer-identification
+                  "   "
+                  mode-line-position 
+                  evil-mode-line-tag
+                  (vc-mode vc-mode)
+                  "  "
+                  ;; mode-line-modes
+                  mode-name
+                  mode-line-misc-info
+                  mode-line-end-spaces
+                  ))
+
+#+END_SRC
 * Org Mode
 ** Links
    - [[https://orgmode.org/][Website]]
