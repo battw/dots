@@ -78,6 +78,10 @@
   (toggle-frame-maximized)
   ;; (toggle-frame-fullscreen)
 #+END_SRC
+** Winner
+#+BEGIN_SRC emacs-lisp
+(winner-mode 1)
+#+END_SRC
 * Clear Company Backends List
 #+BEGIN_SRC emacs-lisp
 (setq company-backends '())
@@ -487,6 +491,8 @@ Find the correct functions for the shorcuts below
     ("s" ace-swap-window "swap")
     ("h" enlarge-window-horizontally "grow horiz" :color red)
     ("H" shrink-window-horizontally "shrink horiz" :color red)
+    ("u" winner-undo "undo")
+    ("U" winner-redo "un-undo")
     ("v" enlarge-window "grow vert" :color red)
     ("V" shrink-window "shrink vert" :color red)
     ("z" text-scale-increase "zoom" :color red)
