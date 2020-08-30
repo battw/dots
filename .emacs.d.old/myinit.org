@@ -88,7 +88,7 @@
 #+END_SRC
 * Fonts
 #+BEGIN_SRC emacs-lisp
-  (set-default-font "mono 13" nil t)
+  (set-frame-font "mono 13" nil t)
   (if (string= system-name "yoga")
       (set-default-font "mono 14" nil t))
 #+END_SRC
@@ -597,7 +597,7 @@ Completion in minibuffer. I'm using Ivy instead.
     (setq ivy-use-virtual-buffers t)
     (setq ivy-count-format "%d/%d ")
     (setq ivy-display-style 'fancy)
-  )
+    )
   #+END_SRC
 
 ** Counsel
@@ -620,8 +620,7 @@ Completion in minibuffer. I'm using Ivy instead.
 
 * Javascript
 #+BEGIN_SRC emacs-lisp
-  (defun js-mode--myinit ()
-  ;; TODO: These variables want to be buffer local to the new js-mode buffer.
+  (defun js-mode--setup-lsp () 
     (setq-local lsp-ui-doc-enable nil)
     (setq-local lsp-ui-sideline-show-diagnostics t)
     (setq-local lsp-ui-sideline-show-code-actions nil)
@@ -631,6 +630,12 @@ Completion in minibuffer. I'm using Ivy instead.
     ;; (setq lsp-ui-sideline-delay 1)
     (lsp)
     )
+     
+  (defun js-mode--myinit ()
+    (js-mode--setup-lsp)
+    (setq-local mode-name "js-mode")
+    )
+
 
   (add-hook 'js-mode-hook #'js-mode--myinit)
 #+END_SRC

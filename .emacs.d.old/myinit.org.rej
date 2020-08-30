@@ -1,0 +1,14 @@
+diff a/.emacs.d/myinit.org b/.emacs.d/myinit.org	(rejected hunks)
+@@ -27,9 +27,9 @@
+ 
+ ** Mode line
+    #+BEGIN_SRC emacs-lisp
+-    ;; Display both line and column numbers in mode line
+-    (setq line-number-mode t)
+-    (setq column-number-mode t)
++     ;; Display both line and column numbers in mode line
++     ;; (setq line-number-mode t)
++     ;; (setq column-number-mode t)
+    #+END_SRC
+ 
+ ** Behaviour
