@@ -70,7 +70,7 @@ let maplocalleader = "\\"
 inoremap kj <esc><right>
 vnoremap kj <esc><right>
 cnoremap kj <c-u><esc><esc>
-inoremap <esc> <nop>
+" inoremap <esc> <nop>
 
 " move line down
 nnoremap <leader>j ddp

@@ -6,11 +6,10 @@ alias egrep='egrep --color=auto'
 alias ls='ls --color=auto'
 alias dir='dir --color=auto'
 
-export PATH=$PATH:~/dropbox/bin
-export PATH=$PATH:~/bin
+
+
 
 export GOPATH=~/go
-export PATH=$PATH:$GOPATH/bin
 
 # enable touch scrolling in firefox
 export MOZ_USE_XINPUT2=1
@@ -42,19 +41,16 @@ xdg-settings set default-web-browser firefox.desktop
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+if [[ -z $IS_PATHS_SET ]]
+then
+    export IS_PATHS_SET=1
+    export PATH=$PATH:~/dropbox/bin
+    export PATH=$PATH:~/bin
+    export PATH=$PATH:$HOME/.emacs.d/bin
+    export PATH=$PATH:$GOPATH/bin
+fi
