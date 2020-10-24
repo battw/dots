@@ -54,3 +54,26 @@
 ;; they are implemented.
 
 (toggle-frame-maximized)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                     ;;
+;; Key Chords/Bindings ;;
+;;                     ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(key-chord-mode 1)
+(setq key-chord-two-keys-delay 0.07)
+(key-chord-define-global "jk" 'evil-normal-state)
+(key-chord-define-global "fd" 'next-multiframe-window)
+(key-chord-define-global "ds" 'swiper)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                     ;;
+;;     Fly-Check       ;;
+;;                     ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; prevent the flycheck hints for including documentation in elisp files
+ (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
