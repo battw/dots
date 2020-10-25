@@ -53,8 +53,17 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                     ;;
+;;     Misc Config     ;;
+;;                     ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (toggle-frame-maximized)
 
+;; Suppress the security warning when loading previously unused themes.
+(setq custom-safe-themes t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -69,11 +78,15 @@
 (key-chord-define-global "fd" 'next-multiframe-window)
 (key-chord-define-global "ds" 'swiper)
 
+(map! :leader
+      :desc "Undo Tree" "u" #'undo-tree-visualize)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                     ;;
 ;;     Fly-Check       ;;
 ;;                     ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; prevent the flycheck hints for including documentation in elisp files
- (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+;; Prevent the flycheck hints for including documentation in elisp files.
+(setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
