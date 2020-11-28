@@ -22,18 +22,11 @@
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-gruvbox)
+
+
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
-
-;; This determines the style of line numbers in effect. If set to `nil', line
-;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type 'relative)
 
 
 ;; Here are some additional functions/macros that could help you configure Doom:
@@ -56,27 +49,67 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                     ;;
+;;          C          ;;
+;;                     ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(setq lsp-clients-clangd-args '("-j=3"
+                                "--background-index"
+                                "--clang-tidy"
+                                "--completion-style=detailed"
+                                "--header-insertion=never"))
+(after! lsp-clangd (set-lsp-priority! 'clangd 2))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                     ;;
+;;       Themes        ;;
+;;                     ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; (setq doom-theme 'doom-gruvbox-light)
+;; (setq doom-theme 'doom-horizon)
+;; (setq doom-theme 'doom-manegarm
+;;       doom-manegarm-darker-background t)
+;; (setq doom-theme 'doom-oceanic-next)
+;; (setq doom-theme 'doom-one)
+
+;; (setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'doom-henna)
+;; (setq doom-theme 'doom-dark+)
+     ;; doom-dark+-blue-modeline t)
+
+
+
+;; (setq doom-theme 'doom-laserwave)
+;; Stop the lazerwave mode-line from being bright pink.
+;; (after! solaire-mode (set-face-background 'solaire-mode-line-face "teal"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                     ;;
 ;;     Misc Config     ;;
 ;;                     ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(toggle-frame-maximized)
+;; (toggle-frame-maximized)
+(setq display-line-numbers-type 'relative)
 
 ;; Suppress the security warning when loading previously unused themes.
+;; If this doesn't work make sure the variable is NOT set in ~/.doom.d/custom.el
 (setq custom-safe-themes t)
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                     ;;
-;; Key Chords/Bindings ;;
+;; Key Bindings/Chords ;;
 ;;                     ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 (key-chord-mode 1)
 (setq key-chord-two-keys-delay 0.07)
 (key-chord-define-global "jk" 'evil-normal-state)
 (key-chord-define-global "fd" 'next-multiframe-window)
-(key-chord-define-global "ds" 'swiper)
+(key-chord-define-global "kl" 'swiper)
 
 (map! :leader
       :desc "Undo Tree" "u" #'undo-tree-visualize)
@@ -90,3 +123,15 @@
 
 ;; Prevent the flycheck hints for including documentation in elisp files.
 (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                     ;;
+;;      Org-Mode       ;;
+;;                     ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; This is the directory used for dooms keybindings.
+(setq org-directory "~/org/")
+(setq org-roam-directory "~/org/roam/")
+(setq org-startup-with-inline-images t)
