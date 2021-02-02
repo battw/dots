@@ -51,15 +51,3 @@
 
 
 (package! key-chord)
-
-;; (use-package! irony
-;;   :hook
-;;   (c++-mode . irony-mode)
-;;   (c-mode . irony-mode)
-;;   (irony-mode . irony-cdb-autosetup-compile-options)
-;; )
-
-;; (use-package! irony-eldoc
-;;   :hook
-;;   (irony-mode . irony-eldoc)
-;; )
