@@ -36,7 +36,7 @@ fi
 
 alias al='cd ~/dropbox/go/src/github.com/llo-oll/algebra; pwd'
 
-xdg-settings set default-web-browser firefox.desktop
+# xdg-settings set default-web-browser firefox.desktop
 
 
 
