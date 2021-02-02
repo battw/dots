@@ -24,11 +24,6 @@
 
 
 
-
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-
-
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
 ;; - `load!' for loading external *.el files relative to this one
@@ -53,13 +48,15 @@
 ;;                     ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+;; Requires clangd installed on system. It's in the clang package on Arch.
 (setq lsp-clients-clangd-args '("-j=3"
                                 "--background-index"
                                 "--clang-tidy"
                                 "--completion-style=detailed"
                                 "--header-insertion=never"))
 (after! lsp-clangd (set-lsp-priority! 'clangd 2))
+
+(remove-hook 'c-mode-common-hook 'rainbow-delimiters-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                     ;;
@@ -76,8 +73,8 @@
 
 ;; (setq doom-theme 'doom-gruvbox)
 (setq doom-theme 'doom-henna)
-;; (setq doom-theme 'doom-dark+)
-     ;; doom-dark+-blue-modeline t)
+;; (setq doom-theme 'doom-dark+
+;;      doom-dark+-blue-modeline t)
 
 
 
@@ -98,7 +95,7 @@
 ;; If this doesn't work make sure the variable is NOT set in ~/.doom.d/custom.el
 (setq custom-safe-themes t)
 
-
+;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                     ;;
 ;; Key Bindings/Chords ;;
 ;;                     ;;
@@ -132,6 +129,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; This is the directory used for dooms keybindings.
-(setq org-directory "~/org/")
-(setq org-roam-directory "~/org/roam/")
+(setq org-directory "~/sync/org/")
+(setq org-roam-directory "~/sync/org/roam/")
 (setq org-startup-with-inline-images t)
